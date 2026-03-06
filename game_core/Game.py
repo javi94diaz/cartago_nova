@@ -15,19 +15,26 @@ class Game:
         ]
 
         self.unit_types = {
-            "Velites": UnitType("Velites", 1, 1, 0, False),
-            "Princeps": UnitType("Princeps", 1, 1, 0, False),
-            "Numidian": UnitType("Numidian", 1, 1, 0, False),
-            "Iberian": UnitType("Iberian", 1, 1, 0, False)
+            "Velites": UnitType("Velites", 1, 1, 0),
+            "Princeps": UnitType("Princeps", 1, 1, 0),
+            "Numidian": UnitType("Numidian", 1, 1, 0),
+            "Iberian": UnitType("Iberian", 1, 1, 0)
         }
 
         # TODO: leer de un archivo las unidades iniciales
-        self.initial_units = {
-            self.unit_types["Velites"]: 5,
-            self.unit_types["Princeps"]: 7,
-            self.unit_types["Numidian"]: 4,
-            self.unit_types["Iberian"]: 2
-        }
+       # self.initial_units = {
+        #    self.unit_types["Velites"]: 5,
+         #   self.unit_types["Princeps"]: 7,
+          #  self.unit_types["Numidian"]: 4,
+           # self.unit_types["Iberian"]: 2
+        #}
+
+        self.initial_units = [
+            ("Velites", 5, Faction.ROME, "Campamento"),
+            ("Princeps", 7, Faction.ROME, "Campamento"),
+            ("Numidian", 4, Faction.CARTHAGE, "Muralla Este"),
+            ("Iberian", 2, Faction.CARTHAGE, "Muralla Sur")
+        ]
 
         self.units = []
         self.create_initial_units()
@@ -36,12 +43,28 @@ class Game:
 
     def create_unit(self, unit_type, number, owner_player, zone):
         print (f"[Game:create_unit] Creating {number} {unit_type.name}/s")
-        for num in range(0, number):
-            self.units.append(
-                Unit(unit_type, owner_player, zone)
-            )
+        
+        for _ in range(number):
             
+            unit = Unit(unit_type, owner_player, zone)
+
+            self.units.append(unit)
+            zone.units.append(unit)
+            owner_player.units.append(unit)
+
     def create_initial_units(self):
     
-        for unit_type, number in self.initial_units.items():
+        for type_name, number, faction, zone_name in self.initial_units:
+
+            unit_type = self.unit_types[type_name]
+            player = self.get_player_by_faction(faction)
+            zone = self.board.zones[zone_name]
+
+            #print (self.board.zones["Campamento"])
+
             self.create_unit(unit_type, number, self.players[0], self.board.zones["Campamento"])
+
+    def get_player_by_faction(self, faction):
+        for player in self.players:
+            if player.faction == faction:
+                return player

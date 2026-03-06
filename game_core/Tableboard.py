@@ -26,5 +26,5 @@ class Tableboard():
         self.print_zones()
 
     def print_zones(self):
-        for zone in self.zones:
-            print(zone)
+        for zone_name, zone in self.zones.items():
+            print(zone_name)
