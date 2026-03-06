@@ -22,13 +22,6 @@ class Game:
         }
 
         # TODO: leer de un archivo las unidades iniciales
-       # self.initial_units = {
-        #    self.unit_types["Velites"]: 5,
-         #   self.unit_types["Princeps"]: 7,
-          #  self.unit_types["Numidian"]: 4,
-           # self.unit_types["Iberian"]: 2
-        #}
-
         self.initial_units = [
             ("Velites", 5, Faction.ROME, "Campamento"),
             ("Princeps", 7, Faction.ROME, "Campamento"),
