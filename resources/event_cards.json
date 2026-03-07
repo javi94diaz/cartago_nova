@@ -1,0 +1,68 @@
+{
+  "event_cards": {
+    "boiling_oil": {
+      "title": "Aceite hirviente",
+      "effect": "Cartago coloca un aceite sobre una muralla de su elección listo para usar"
+    },
+    "improvised_milicians": {
+      "title": "Milicia improvisada",
+      "effect": " Cartago recibe una unidad de lanceros iberos de refuerzo en el Foro."
+    },
+    "carthage_honor": {
+      "title": "Honor de Cartago",
+      "effect": "."
+    },
+    "balearic_storm": {
+      "title": "Tormenta Balear",
+      "effect": "Los honderos baleáricos tiran +1 dado este turno."
+    },
+    "punic_proud": {
+      "title": "Orgullo púnico",
+      "effect": "Cartago puede repetir una tirada de combate este turno."
+    },
+    "roman_engineering": {
+      "title": "Ingeniería romana",
+      "effect": " El jugador romano quita 1 punto de resistencia a una muralla de su elección."
+    },
+    "favorable_omens": {
+      "title": "Auspicios favorables",
+      "effect": "Roma puede repetir una tirada de combate este turno."
+    },
+    "roman_intelligence": {
+      "title": "Inteligencia romana",
+      "effect": "Roma mira la siguiente carta de evento y elige si la coloca al final."
+    },
+    "roman_reserve": {
+      "title": "Reserva romana",
+      "effect": "Roma recibe una unidad de prínceps en el Campamento."
+    },
+    "audacious_landing": {
+      "title": "Desembarco audaz",
+      "effect": "Roma recibe una unidad de marineros en la Bahía."
+    },
+    "fog_of_war": {
+      "title": "Niebla de batalla",
+      "effect": "Ninguna unidad podrá disparar este turno."
+    },
+    "urban_chaos": {
+      "title": "Caos urbano",
+      "effect": "Este turno no se podrán realizar movimientos desde o hacia el centro de la ciudad, el foro o la ciudadela."
+    },
+    "paralyzed_command": {
+      "title": "Mando paralizado",
+      "effect": "Los líderes no pueden activarse este turno."
+    },
+    "extreme_fatigue": {
+      "title": "Fatiga extrem",
+      "effect": "Cada unidad tira -1 dado este turno."
+    },
+    "no_quarter": {
+      "title": "Sin cuartel",
+      "effect": "Este turno, al final de cada fase de combate ambos bandos reciben 1 daño."
+    },
+    "tempus_dominandi": {
+      "title": "Tempus dominandi",
+      "effect": "La iniciativa pasa al otro bando en este turno."
+    }
+  }
+}
