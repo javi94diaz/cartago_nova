@@ -15,3 +15,7 @@ class TurnManager:
     
     def change_turn(self):
         pass        
+
+    def game_over(self):
+        pass
+    
