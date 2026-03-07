@@ -1,4 +1,5 @@
 import random
+import json
 from game_core.Enum import Faction, Phase
 from game_core.TurnManager import TurnManager
 from game_core.Board import Board
@@ -23,37 +24,13 @@ class Game:
             "iberian": UnitType("Iberian", 1, 1, 0)
         }
 
-        # TODO: leer de un archivo las unidades iniciales, a futuro se pueden poner varios escenarios
-        self.initial_units = [
-            {
-                "type": "velites",
-                "number": 5,
-                "faction": Faction.ROME,
-                "zone": "Campamento"
-            },
-            {
-                "type": "princeps",
-                "number": 7,
-                "faction": Faction.ROME,
-                "zone": "Campamento"
-            },
-            {
-                "type": "numidian",
-                "number": 4,
-                "faction": Faction.CARTHAGE,
-                "zone": "Muralla Este"
-            },
-            {
-                "type": "iberian",
-                "number": 2,
-                "faction": Faction.CARTHAGE,
-                "zone": "Muralla Sur"
-            }
-        ]
+        self.initial_units = []
+        self.load_initial_units("resources/initial_units.json")
 
         self.units = []
         self.create_initial_units()
 
+        # TODO: Load event cards from JSON file
         # self.event_cards = {
         #     "Event 1": "Effect 1",
         #     "Event 2": "Effect 2",
@@ -73,6 +50,9 @@ class Game:
         #     "Event 16": "Effect 16"
         # }
 
+        #self.event_cards = {}
+        #self.load_event_cards()
+
         self.event_cards = {
             "Event 1": "Effect 1",
             "Event 2": "Effect 2",
@@ -85,32 +65,62 @@ class Game:
 
         self.main_loop()
 
+    def load_initial_units(self, filename):
+        
+        with open(filename, "r", encoding="utf-8") as file:
+            filedata = json.load(file)
+
+        for fileunit in filedata["initial_units"]:
+            type = fileunit["type"]
+            count = fileunit["count"]
+            faction = fileunit["faction"]
+            zone = fileunit["zone"]
+
+            self.initial_units.append(
+                {
+                    "type": type,
+                    "count": count,
+                    "faction": faction,
+                    "zone": zone
+                }
+            )
+
+        print("[Game:load_initial_units] Loaded initial units")
+        print (self.initial_units)
+
     def create_initial_units(self):
 
         for unit_data in self.initial_units:
 
             unit_type = self.unit_types[unit_data["type"]]
-            number = unit_data["number"]
-            player = self.get_player_by_faction(unit_data["faction"])
+            count = unit_data["count"]
+
+            try:
+                faction = Faction[unit_data["faction"]]
+            except KeyError:
+                raise ValueError(f"Unknown faction: {unit_data['faction']}")
+            
+            player = self.get_player_by_faction(faction)
             zone = self.board.zones[unit_data["zone"]]
 
-            self.create_unit(unit_type, number, player, zone)
+            self.create_unit(unit_type, count, player, zone)
 
-    def create_unit(self, unit_type, number, owner_player, zone):
-        print (f"[Game:create_unit] Creating {number} {unit_type.name}/s for {owner_player.faction} in {zone.name}")
+    def create_unit(self, unit_type, count, owner_player, zone):
+        print (f"[Game:create_unit] Creating {count} {unit_type.name}/s for {owner_player.faction} in {zone.name}")
         
-        for _ in range(number):
+        for _ in range(count):
             
             unit = Unit(unit_type, owner_player, zone)
 
             self.units.append(unit)
             zone.units.append(unit)
             owner_player.units.append(unit)
-
+    
     def get_player_by_faction(self, faction):
         for player in self.players:
             if player.faction == faction:
                 return player
+        raise ValueError(f"No player found for faction {faction}")
 
     def resolve_initiative(self):
         
@@ -165,8 +175,10 @@ class Game:
     def main_loop(self):
 
         while (not self.turn_manager.game_over()):
-                       
+
             phase = self.turn_manager.phase
+
+            self.board.print_zones()
             
             if phase == Phase.INITIATIVE:
                 self.resolve_initiative()

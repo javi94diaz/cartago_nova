@@ -4,6 +4,7 @@
       "name": "Campamento",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Explanada"]
 
     },
@@ -11,84 +12,98 @@
       "name": "Explanada",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Campamento", "Muralla Este"]
     },
     {
       "name": "Muralla Este",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Explanada", "Zona Este"]
     },
     {
       "name": "Zona Este",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Muralla Este", "Zona Norte", "Centro Ciudad"]
     },
     {
       "name": "Centro Ciudad",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Zona Este", "Zona Norte", "Foro", "Zona Sur"]
     },
     {
       "name": "Lengua de tierra",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Laguna"]
     },
     {
       "name": "Laguna",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Lengua de tierra", "Muralla Norte"]
     },
     {
       "name": "Muralla Norte",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Laguna", "Zona Norte"]
     },
     {
       "name": "Zona Norte",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Muralla Norte", "Zona Este", "Centro Ciudad", "Foro"]
     },
     {
       "name": "Foro",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Zona Norte", "Centro Ciudad", "Zona Sur", "Ciudadela"]
     },
     {
       "name": "Ciudadela",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Foro"]
     },
     {
       "name": "Zona Sur",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Foro", "Centro Ciudad", "Muralla Sur"]
     },
     {
       "name": "Muralla Sur",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Zona Sur", "Puerto"]
     },
     {
       "name": "Puerto",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Bahía", "Muralla Sur"]
     },
     {
       "name": "Bahía",
       "x": 100,
       "y": 50,
+      "capacity": 1000,
       "adjacent": ["Puerto"]
     }
   ]

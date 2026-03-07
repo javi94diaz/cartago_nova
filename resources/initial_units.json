@@ -1,0 +1,28 @@
+{
+    "initial_units": [
+        {
+            "type": "velites",
+            "count": 5,
+            "faction": "ROME",
+            "zone": "Campamento"
+        },
+        {
+            "type": "princeps",
+            "count": 7,
+            "faction": "ROME",
+            "zone": "Campamento"
+        },
+        {
+            "type": "numidian",
+            "count": 4,
+            "faction": "CARTHAGE",
+            "zone": "Muralla Este"
+        },
+        {
+            "type": "iberian",
+            "count": 2,
+            "faction": "CARTHAGE",
+            "zone": "Muralla Sur"
+        }
+    ]
+}
