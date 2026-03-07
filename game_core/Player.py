@@ -6,3 +6,6 @@ class Player():
         self.name = name
         self.faction = faction
         self.units = []
+
+    def __repr__(self):
+        return f"<Player {self.name} ({self.faction})>"

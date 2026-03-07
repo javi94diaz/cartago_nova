@@ -13,5 +13,7 @@ class Unit:
         self.engaged = False
         self.alive = True
 
+    def __repr__(self):
+        return f"<Unit {self.type} ({self.owner.faction})>"
 
         

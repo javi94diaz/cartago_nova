@@ -5,3 +5,6 @@ class UnitType:
         self.max_health = max_health        
         self.combat_dice = combat_dice
         self.shots = shots
+
+    def __repr__(self):
+        return f"<UnitType {self.name}>"

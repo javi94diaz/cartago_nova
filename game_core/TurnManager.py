@@ -9,3 +9,9 @@ class TurnManager:
         self.current_player = players[0]
         self.initiative_player = players[0]
         self.phase = Phase.INITIATIVE
+
+    def change_phase(self):
+        pass    
+    
+    def change_turn(self):
+        pass    

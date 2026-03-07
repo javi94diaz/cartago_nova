@@ -46,7 +46,6 @@ class Game:
             owner_player.units.append(unit)
 
     def create_initial_units(self):
-    
         for type_name, number, faction, zone_name in self.initial_units:
 
             unit_type = self.unit_types[type_name]
