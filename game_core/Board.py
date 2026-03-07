@@ -1,15 +1,15 @@
 import json
 from game_core.Zone import Zone
-class Tableboard():
+class Board():
     def __init__(self):
-        print(f"[Tableboard] Create Tableboard")
+        print(f"[Board] Create Board")
         
         self.zones = {}
         self.load_map("resources/map.json")
         #self.print_zones()
 
     def print_zones(self):
-        print("[Tableboard:print_zones]")
+        print("[Board:print_zones]")
         for zone_name, zone in self.zones.items():
             print(zone_name, end=", ")
             print(zone)

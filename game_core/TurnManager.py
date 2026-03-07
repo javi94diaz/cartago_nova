@@ -9,6 +9,7 @@ class TurnManager:
         self.current_player = players[0]
         self.initiative_player = players[0]
         self.phase = Phase.INITIATIVE
+        self.game_finished = False
 
     def next_phase(self):
         print (f"[TurnManager:next_phase]")
@@ -35,5 +36,5 @@ class TurnManager:
         pass        
 
     def game_over(self):
-        pass
+        return self.game_finished
     

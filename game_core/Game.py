@@ -1,7 +1,7 @@
 import random
 from game_core.Enum import Faction, Phase
 from game_core.TurnManager import TurnManager
-from game_core.Tableboard import Tableboard
+from game_core.Board import Board
 from game_core.Player import Player
 from game_core.UnitType import UnitType
 from game_core.Unit import Unit
@@ -9,7 +9,7 @@ from game_core.Unit import Unit
 class Game:
     def __init__(self):
         print("[Game:__init__] Start Game")
-        self.board = Tableboard()
+        self.board = Board()
 
         self.players = [
             Player("Javi", Faction.ROME),
@@ -116,21 +116,20 @@ class Game:
         
         user_input = None
         while (user_input != "yes" and user_input != "no"):
-            print (f"[Game:resolve_initiative] Player {self.turn_manager.initiative_player}: Maintain initiative?: ")
+            print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player}: Maintain initiative?: ")
             user_input = input()
         
         if user_input == "yes":
-            print (f"[Game:resolve_initiative] Player {self.turn_manager.initiative_player} maintains initiative")
+            print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player} maintains initiative")
 
         elif user_input == "no":
             if self.turn_manager.initiative_player == self.players[0]:
                 self.turn_manager.initiative_player = self.players[1]
-                print (f"[Game:resolve_initiative] Player {self.turn_manager.initiative_player} gets initiative")
+                print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player} gets initiative")
 
             elif self.turn_manager.initiative_player == self.players[1]:
                 self.turn_manager.initiative_player = self.players[0]
-                print (f"[Game:resolve_initiative] Player {self.turn_manager.initiative_player} gets initiative")
-            
+                print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player} gets initiative")
 
     def resolve_event(self):
         
@@ -142,7 +141,7 @@ class Game:
 
         event_name = random.choice(list(self.event_cards.keys()))
 
-        print (f"[Game:resolve_event] Event card: {event_name}: with effect {self.event_cards[event_name]}")
+        print (f"[Game:resolve_event] Picked event card: {event_name} with effect {self.event_cards[event_name]}")
         self.event_cards.pop(event_name)
         
         print("self.event_cards")
@@ -166,6 +165,8 @@ class Game:
     def main_loop(self):
 
         while (not self.turn_manager.game_over()):
+            
+            self.board
             
             phase = self.turn_manager.phase
             
