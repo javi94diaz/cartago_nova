@@ -6,7 +6,7 @@ class Tableboard():
         
         self.zones = {}
         self.load_map("resources/map.json")
-        self.print_zones()
+        #self.print_zones()
 
     def print_zones(self):
         print("[Tableboard:print_zones]")
