@@ -21,7 +21,7 @@ class Game:
             "velites": UnitType("Velites", 1, 1, 0),
             "princeps": UnitType("Princeps", 1, 1, 0),
             "numidian": UnitType("Numidian", 1, 1, 0),
-            "iberian": UnitType("Iberian", 1, 1, 0)
+            "iberian_lancer": UnitType("Iberian Lancer", 1, 1, 0)
         }
 
         self.initial_units = []
@@ -178,7 +178,9 @@ class Game:
 
             phase = self.turn_manager.phase
 
-            self.board.print_zones()
+            #self.board.print_zones()
+            #self.board.print_zone_summary()
+            self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE:
                 self.resolve_initiative()
