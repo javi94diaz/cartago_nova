@@ -25,18 +25,48 @@ class Game:
             "Iberian": UnitType("Iberian", 1, 1, 0)
         }
 
-        # TODO: leer de un archivo las unidades iniciales
+        # TODO: leer de un archivo las unidades iniciales, a futuro se pueden poner varios escenarios
         self.initial_units = [
-            ("Velites", 5, Faction.ROME, "Campamento"),
-            ("Princeps", 7, Faction.ROME, "Campamento"),
-            ("Numidian", 4, Faction.CARTHAGE, "Muralla Este"),
-            ("Iberian", 2, Faction.CARTHAGE, "Muralla Sur")
+            {
+                "type": "Velites",
+                "number": 5,
+                "faction": Faction.ROME,
+                "zone": "Campamento"
+            },
+            {
+                "type": "Princeps",
+                "number": 7,
+                "faction": Faction.ROME,
+                "zone": "Campamento"
+            },
+            {
+                "type": "Numidian",
+                "number": 4,
+                "faction": Faction.CARTHAGE,
+                "zone": "Muralla Este"
+            },
+            {
+                "type": "Iberian",
+                "number": 2,
+                "faction": Faction.CARTHAGE,
+                "zone": "Muralla Sur"
+            }
         ]
 
         self.units = []
         self.create_initial_units()
         self.turn_manager = TurnManager(self.players)
 
+    def create_initial_units(self):
+
+        for unit_data in self.initial_units:
+
+            unit_type = self.unit_types[unit_data["type"]]
+            number = unit_data["number"]
+            player = self.get_player_by_faction(unit_data["faction"])
+            zone = self.board.zones[unit_data["zone"]]
+
+            self.create_unit(unit_type, number, player, zone)
 
     def create_unit(self, unit_type, number, owner_player, zone):
         print (f"[Game:create_unit] Creating {number} {unit_type.name}/s")
@@ -48,15 +78,6 @@ class Game:
             self.units.append(unit)
             zone.units.append(unit)
             owner_player.units.append(unit)
-
-    def create_initial_units(self):
-        for type_name, number, faction, zone_name in self.initial_units:
-
-            unit_type = self.unit_types[type_name]
-            player = self.get_player_by_faction(faction)
-            zone = self.board.zones[zone_name]
-
-            self.create_unit(unit_type, number, player, zone)
 
     def get_player_by_faction(self, faction):
         for player in self.players:
