@@ -165,9 +165,7 @@ class Game:
     def main_loop(self):
 
         while (not self.turn_manager.game_over()):
-            
-            self.board
-            
+                       
             phase = self.turn_manager.phase
             
             if phase == Phase.INITIATIVE:
@@ -187,11 +185,8 @@ class Game:
 
             elif phase == Phase.COMBAT:
                 self.resolve_combat()
-            
-            else:
-                print(f"[Game:main_loop] Error - Phase not valid")
 
             self.turn_manager.next_phase()
 
-
+        print("[Game:main_loop] Game over!")
             
