@@ -9,6 +9,10 @@ class Game:
     def __init__(self):
         print("[Game] Start Game")
         self.board = Tableboard()
+
+        print ("Vecinos")
+        print (self.board.zones["Foro"].adjacent)
+
         self.players = [
             Player("Javi", Faction.ROME),
             Player("Diego", Faction.CARTHAGE)
@@ -30,7 +34,7 @@ class Game:
         ]
 
         self.units = []
-        self.create_initial_units()
+        #self.create_initial_units()
         self.turn_manager = TurnManager(self.players)
 
 
@@ -52,9 +56,7 @@ class Game:
             player = self.get_player_by_faction(faction)
             zone = self.board.zones[zone_name]
 
-            #print (self.board.zones["Campamento"])
-
-            self.create_unit(unit_type, number, self.players[0], self.board.zones["Campamento"])
+            self.create_unit(unit_type, number, player, zone)
 
     def get_player_by_faction(self, faction):
         for player in self.players:
