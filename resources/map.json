@@ -1,110 +1,109 @@
 {
-  "zones": [
-    {
+  "zones": {
+    "camp": {
       "name": "Campamento",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Explanada"]
-
+      "adjacent": ["plain"]
     },
-    {
+    "plain": {
       "name": "Explanada",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Campamento", "Muralla Este"]
+      "adjacent": ["camp", "east_wall"]
     },
-    {
+    "east_wall": {
       "name": "Muralla Este",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Explanada", "Zona Este"]
+      "adjacent": ["plain", "east_zone"]
     },
-    {
+    "east_zone": {
       "name": "Zona Este",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Muralla Este", "Zona Norte", "Centro Ciudad"]
+      "adjacent": ["east_wall", "north_zone", "city_center"]
     },
-    {
+    "city_center": {
       "name": "Centro Ciudad",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Zona Este", "Zona Norte", "Foro", "Zona Sur"]
+      "adjacent": ["east_zone", "north_zone", "forum", "south_zone"]
     },
-    {
+    "land_tongue": {
       "name": "Lengua de tierra",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Laguna"]
+      "adjacent": ["lagoon"]
     },
-    {
+    "lagoon": {
       "name": "Laguna",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Lengua de tierra", "Muralla Norte"]
+      "adjacent": ["land_tongue", "north_wall"]
     },
-    {
+    "north_wall": {
       "name": "Muralla Norte",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Laguna", "Zona Norte"]
+      "adjacent": ["lagoon", "north_zone"]
     },
-    {
+    "north_zone": {
       "name": "Zona Norte",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Muralla Norte", "Zona Este", "Centro Ciudad", "Foro"]
+      "adjacent": ["north_wall", "east_zone", "city_center", "forum"]
     },
-    {
+    "forum": {
       "name": "Foro",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Zona Norte", "Centro Ciudad", "Zona Sur", "Ciudadela"]
+      "adjacent": ["north_zone", "city_center", "south_zone", "citadel"]
     },
-    {
+    "citadel": {
       "name": "Ciudadela",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Foro"]
+      "adjacent": ["forum"]
     },
-    {
+    "south_zone": {
       "name": "Zona Sur",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Foro", "Centro Ciudad", "Muralla Sur"]
+      "adjacent": ["forum", "city_center", "south_wall"]
     },
-    {
+    "south_wall": {
       "name": "Muralla Sur",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Zona Sur", "Puerto"]
+      "adjacent": ["south_zone", "port"]
     },
-    {
+    "port": {
       "name": "Puerto",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Bahía", "Muralla Sur"]
+      "adjacent": ["bay", "south_wall"]
     },
-    {
+    "bay": {
       "name": "Bahía",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["Puerto"]
+      "adjacent": ["port"]
     }
-  ]
+  }
 }

@@ -11,28 +11,31 @@ class Board():
         #self.print_zones()
 
     def load_map(self, filename):
-        
+
         with open(filename, "r", encoding="utf-8") as file:
             filedata = json.load(file)
 
         # Load and create zones
-        for filezone in filedata["zones"]:
+        for zone_id, filezone in filedata["zones"].items():
             name = filezone["name"]
             x = filezone["x"]
             y = filezone["y"]
             capacity = filezone["capacity"]
-            self.zones[name] = Zone(name, x, y, capacity)
 
-        #Load adjacents
-        for filezone in filedata["zones"]:
-            zone = self.zones[filezone["name"]]
+            self.zones[zone_id] = Zone(zone_id, name, x, y, capacity)
 
-            for neighbor_name in filezone["adjacent"]:
-                neighbor = self.zones[neighbor_name]
-                zone.adjacent.add(neighbor) # Add neighbor to class set
-                neighbor.adjacent.add(zone) # Bidirectional relationship
+        # Load adjacents
+        for zone_id, filezone in filedata["zones"].items():
+            zone = self.zones[zone_id]
 
-    def print_zones(self): # FIRST METHOD
+            for neighbor_id in filezone["adjacent"]:
+                neighbor = self.zones[neighbor_id]
+                zone.adjacent.add(neighbor)
+                neighbor.adjacent.add(zone)  # Bidirectional relationship
+        
+        print("[Board:load_map] Loaded map")
+
+    def print_zone_basic(self):
         print("[Board:print_zones]")
         for zone_name, zone in self.zones.items():
             print(f"Zone {zone_name} has {len(zone.units)} unit/s")

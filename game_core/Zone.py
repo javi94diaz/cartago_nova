@@ -1,7 +1,8 @@
 
 class Zone:
-    def __init__(self, name, x , y, capacity):
-        print(f"[Zone] Create Zone {name}")
+    def __init__(self, zone_id, name, x , y, capacity):
+        #print(f"[Zone] Create Zone {name}")
+        self.id = zone_id
         self.name = name
         self.x = x
         self.y = y

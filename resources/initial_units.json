@@ -4,97 +4,97 @@
             "type": "velites",
             "count": 4,
             "faction": "ROME",
-            "zone": "Campamento"
+            "zone": "camp"
         },
         {
             "type": "princeps",
             "count": 4,
             "faction": "ROME",
-            "zone": "Campamento"
+            "zone": "camp"
         },
         {
             "type": "triarii",
             "count": 2,
             "faction": "ROME",
-            "zone": "Campamento"
+            "zone": "camp"
         },
         {
             "type": "sailors",
             "count": 4,
             "faction": "ROME",
-            "zone": "Bahía"
+            "zone": "bay"
         },
         {
             "type": "princeps",
             "count": 2,
             "faction": "ROME",
-            "zone": "Bahía"
+            "zone": "bay"
         },
         {
             "type": "velites",
             "count": 1,
             "faction": "ROME",
-            "zone": "Lengua de tierra"
+            "zone": "land_tongue"
         },
         {
             "type": "princeps",
             "count": 1,
             "faction": "ROME",
-            "zone": "Lengua de tierra"
+            "zone": "land_tongue"
         },
         {
             "type": "african_infantry",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Foro"
+            "zone": "forum"
         },
         {
             "type": "african_infantry",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Centro Ciudad"
+            "zone": "city_center"
         },
         {
             "type": "iberian_lancers",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Zona Este"
+            "zone": "east_zone"
         },
         {
             "type": "iberian_lancers",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Zona Sur"
+            "zone": "south_zone"
         },
         {
             "type": "iberian_lancers",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Zona Norte"
+            "zone": "north_zone"
         },
         {
             "type": "balearic_slingers",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Muralla Este"
+            "zone": "east_wall"
         },        
         {
             "type": "numidians",
             "count": 2,
             "faction": "CARTHAGE",
-            "zone": "Muralla Este"
+            "zone": "east_wall"
         },
         {
             "type": "balearic_slingers",
             "count": 1,
             "faction": "CARTHAGE",
-            "zone": "Muralla Sur"
+            "zone": "south_wall"
         },        
         {
             "type": "numidians",
             "count": 2,
             "faction": "CARTHAGE",
-            "zone": "Muralla Sur"
+            "zone": "south_wall"
         }
     ]
 }

@@ -1,3 +1,4 @@
+import os
 import random
 import json
 from game_core.Enum import Faction, Phase
@@ -6,6 +7,11 @@ from game_core.Board import Board
 from game_core.Player import Player
 from game_core.UnitType import UnitType
 from game_core.Unit import Unit
+from game_core.EventCard import EventCard
+
+
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
 
 class Game:
     def __init__(self):
@@ -26,34 +32,8 @@ class Game:
         self.units = []
         self.create_initial_units()
 
-        # TODO: Load event cards from JSON file
-        # self.event_cards = {
-        #     "Event 1": "Effect 1",
-        #     "Event 2": "Effect 2",
-        #     "Event 3": "Effect 3",
-        #     "Event 4": "Effect 4",
-        #     "Event 5": "Effect 5",
-        #     "Event 6": "Effect 6",
-        #     "Event 7": "Effect 7",
-        #     "Event 8": "Effect 8",
-        #     "Event 9": "Effect 9",
-        #     "Event 10": "Effect 10",
-        #     "Event 11": "Effect 11",
-        #     "Event 12": "Effect 12",
-        #     "Event 13": "Effect 13",
-        #     "Event 14": "Effect 14",
-        #     "Event 15": "Effect 15",
-        #     "Event 16": "Effect 16"
-        # }
-
-        #self.event_cards = {}
-        #self.load_event_cards()
-
-        self.event_cards = {
-            "Event 1": "Effect 1",
-            "Event 2": "Effect 2",
-            "Event 3": "Effect 3"
-        }
+        self.event_cards = {}
+        self.load_event_cards("resources/event_cards.json")
 
         self.initial_event_cards = self.event_cards.copy()
 
@@ -75,8 +55,9 @@ class Game:
 
             self.unit_types[key] = UnitType(name, max_health, attack, shots)
 
-        print("[Game:load_unit_types] Loaded unit types")
-        print(self.unit_types)
+        print(f"[Game:load_unit_types] Loaded {len(self.unit_types)} unit types")
+        # for key, value in self.unit_types.items():
+        #     print (key, value)
 
     def load_initial_units(self, filename):
         
@@ -98,8 +79,9 @@ class Game:
                 }
             )
 
-        print("[Game:load_initial_units] Loaded initial units")
-        print (self.initial_units)
+        print(f"[Game:load_initial_units] Loaded {len(self.initial_units)} initial units")
+        # for unit in self.initial_units:
+        #     print (unit, end = "\n")
 
     def create_initial_units(self):
 
@@ -111,12 +93,18 @@ class Game:
             try:
                 faction = Faction[unit_data["faction"]]
             except KeyError:
-                raise ValueError(f"Unknown faction: {unit_data['faction']}")
-            
+                raise ValueError(f"[Game:create_initial_units] Unknown faction: {unit_data['faction']}")
+
             player = self.get_player_by_faction(faction)
-            zone = self.board.zones[unit_data["zone"]]
+            zone_id = unit_data["zone"]
+
+            try:
+                zone = self.board.zones[zone_id]
+            except KeyError:
+                raise ValueError(f"[Game:create_initial_units] Unknown zone: {zone_id}")
 
             self.create_unit(unit_type, count, player, zone)
+
 
     def create_unit(self, unit_type, count, owner_player, zone):
         print (f"[Game:create_unit] Creating {count} {unit_type.name}/s for {owner_player.faction} in {zone.name}")
@@ -129,11 +117,31 @@ class Game:
             zone.units.append(unit)
             owner_player.units.append(unit)
     
+    def load_event_cards(self, filename):
+
+        with open(filename, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        self.event_cards = {}
+
+        for card_id, card_data in data["event_cards"].items():
+
+            title = card_data["title"]
+            effect = card_data["effect"]
+
+            card = EventCard(card_id, title, effect)
+
+            self.event_cards[card_id] = card
+
+        print(f"[Game:load_event_cards] Loaded {len(self.event_cards)} event cards")
+        for key, value in self.event_cards.items():
+            print (key, value)
+
     def get_player_by_faction(self, faction):
         for player in self.players:
             if player.faction == faction:
                 return player
-        raise ValueError(f"No player found for faction {faction}")
+        raise ValueError(f"[Game:get_player_by_faction] No player found for faction {faction}")
 
     def resolve_initiative(self):
         
@@ -159,7 +167,8 @@ class Game:
         if (len(self.event_cards) == 0):
             self.event_cards = self.initial_event_cards.copy()
             print("self.event_cards")
-            print(self.event_cards)
+            for key, value in self.event_cards.items():
+                print(key, value)
             print("[Game:resolve_event] Shuffling the event cards into a new deck!")
 
         event_name = random.choice(list(self.event_cards.keys()))
@@ -167,10 +176,7 @@ class Game:
         print (f"[Game:resolve_event] Picked event card: {event_name} with effect {self.event_cards[event_name]}")
         self.event_cards.pop(event_name)
         
-        print("self.event_cards")
-        print(self.event_cards)
-        print("self.initial_event_cards")
-        print (self.initial_event_cards)
+        print(f"{len(self.event_cards)}/{len(self.initial_event_cards)} event cards remaining")
 
 
     def resolve_oil_charges(self):
@@ -189,11 +195,12 @@ class Game:
 
         while (not self.turn_manager.game_over()):
 
+            #clear_screen()
             phase = self.turn_manager.phase
 
-            #self.board.print_zones()
-            #self.board.print_zone_summary()
-            self.board.print_zone_detailed()
+            #self.board.print_zone_basic()
+            self.board.print_zone_summary()
+            #self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE:
                 self.resolve_initiative()
