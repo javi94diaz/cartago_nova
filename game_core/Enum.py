@@ -8,7 +8,10 @@ class Phase(Enum):
     SHOOT = 5
     COMBAT = 6
 
-class Faction:
+class Faction(Enum):
     ROME = 1
     CARTHAGE = 2
     NO_FACTION = 3
+
+    def __str__(self):
+        return self.name
