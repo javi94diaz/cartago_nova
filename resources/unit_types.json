@@ -1,0 +1,52 @@
+{
+  "unit_types": {
+    "velites": {
+      "name": "Velites",
+      "max_health": 1,
+      "attack": 1,
+      "shots": 0
+    },
+    "sailors": {
+      "name": "Sailors",
+      "max_health": 2,
+      "attack": 2,
+      "shots": 2
+    },
+    "princeps": {
+      "name": "Princeps",
+      "max_health": 2,
+      "attack": 3,
+      "shots": 0
+    },
+    "triarii": {
+      "name": "Triarii",
+      "max_health": 2,
+      "attack": 4,
+      "shots": 2
+    },
+    "numidians": {
+      "name": "Numidians",
+      "max_health": 1,
+      "attack": 1,
+      "shots": 0
+    },
+    "balearic_slingers": {
+      "name": "Balearic Slingers",
+      "max_health": 1,
+      "attack": 1,
+      "shots": 2
+    },
+    "iberian_lancers": {
+      "name": "Iberian Lancers",
+      "max_health": 2,
+      "attack": 2,
+      "shots": 0
+    },
+    "african_infantry": {
+      "name": "African Infantry",
+      "max_health": 2,
+      "attack": 3,
+      "shots": 0
+    }
+  }
+}
