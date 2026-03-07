@@ -1,6 +1,12 @@
-
-class AssaultAction:
+from game_core.actions.Action import Action
+class AssaultAction(Action):
     def __init__(self, game, attacker, defender, origin, destination):
+        pass
+
+    def validate(self, game):
+        pass
+
+    def execute(self, game):
         pass
 
 #El AssaultAction:

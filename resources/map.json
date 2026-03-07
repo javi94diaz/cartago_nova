@@ -5,105 +5,120 @@
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["plain"]
+      "adjacent": ["plain"],
+      "is_city": "False"
     },
     "plain": {
       "name": "Explanada",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["camp", "east_wall"]
+      "adjacent": ["camp", "east_wall"],
+      "is_city": "False"
     },
     "east_wall": {
       "name": "Muralla Este",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["plain", "east_zone"]
+      "adjacent": ["plain", "east_zone"],
+      "is_city": "True"
     },
     "east_zone": {
       "name": "Zona Este",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["east_wall", "north_zone", "city_center"]
+      "adjacent": ["east_wall", "north_zone", "city_center"],
+      "is_city": "True"
     },
     "city_center": {
       "name": "Centro Ciudad",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["east_zone", "north_zone", "forum", "south_zone"]
+      "adjacent": ["east_zone", "north_zone", "forum", "south_zone"],
+      "is_city": "True"
     },
     "land_tongue": {
       "name": "Lengua de tierra",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["lagoon"]
+      "adjacent": ["lagoon"],
+      "is_city": "False"
     },
     "lagoon": {
       "name": "Laguna",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["land_tongue", "north_wall"]
+      "adjacent": ["land_tongue", "north_wall"],
+      "is_city": "False"
     },
     "north_wall": {
       "name": "Muralla Norte",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["lagoon", "north_zone"]
+      "adjacent": ["lagoon", "north_zone"],
+      "is_city": "True"
     },
     "north_zone": {
       "name": "Zona Norte",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["north_wall", "east_zone", "city_center", "forum"]
+      "adjacent": ["north_wall", "east_zone", "city_center", "forum"],
+      "is_city": "True"
     },
     "forum": {
       "name": "Foro",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["north_zone", "city_center", "south_zone", "citadel"]
+      "adjacent": ["north_zone", "city_center", "south_zone", "citadel"],
+      "is_city": "True"
     },
     "citadel": {
       "name": "Ciudadela",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["forum"]
+      "adjacent": ["forum"],
+      "is_city": "True"
     },
     "south_zone": {
       "name": "Zona Sur",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["forum", "city_center", "south_wall"]
+      "adjacent": ["forum", "city_center", "south_wall"],
+      "is_city": "True"
     },
     "south_wall": {
       "name": "Muralla Sur",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["south_zone", "port"]
+      "adjacent": ["south_zone", "port"],
+      "is_city": "True"
     },
     "port": {
       "name": "Puerto",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["bay", "south_wall"]
+      "adjacent": ["bay", "south_wall"],
+      "is_city": "False"
     },
     "bay": {
       "name": "Bahía",
       "x": 100,
       "y": 50,
       "capacity": 1000,
-      "adjacent": ["port"]
+      "adjacent": ["port"],
+      "is_city": "False"
     }
   }
 }

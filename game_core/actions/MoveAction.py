@@ -1,19 +1,32 @@
-
-class MoveAction:
+from game_core.actions.Action import Action
+from game_core.Enum import Faction
+class MoveAction(Action):
     def __init__(self, unit, origin, destination):
         self.unit = unit
         self.origin = origin
         self.destination = destination
 
-    def check_valid_destination():
-        pass
-        # casilla adyacente y sin enemigos
-        # si el bando es cartago, no puede salir de la ciudad
-        # si la zona origen es muralla norte, no puede ir a la laguna
+    def validate(self, game):
+        if self.destination not in self.origin.adjacent and self.destination != self.origin:
+            raise ValueError(f"[MoveAction:validate] Destination is not adjacent to origin")
 
-    def check_enemy():
-        pass
-        # chequear si hay enemigo en el destino?
+        for unit in self.destination.units:
+            #if unit.owner != self.unit.owner:
+            if unit.zone == self.destination and unit.owner != self.unit.owner:
+                raise ValueError(f"[MoveAction:validate] Enemy units present in destination")
+            
+        if self.unit.owner.faction == Faction.CARTHAGE:
+            if self.origin.is_city and not self.destination.is_city:
+                raise ValueError(f"[MoveAction:validate] Carthage cannot leave the city")
+            
+        if self.origin.id == "north_wall" and self.destination.id == "lagoon":
+            raise ValueError("[MoveAction:validate] Cannot move from North Wall to Lagoon")
 
     def execute(self, game):
-        pass
+        
+        self.validate(game)
+
+        self.origin.units.remove(self.unit)
+        self.destination.units.append(self.unit)
+
+        self.unit.zone = self.destination

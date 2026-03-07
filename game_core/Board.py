@@ -21,8 +21,9 @@ class Board():
             x = filezone["x"]
             y = filezone["y"]
             capacity = filezone["capacity"]
+            is_city = filezone["is_city"]
 
-            self.zones[zone_id] = Zone(zone_id, name, x, y, capacity)
+            self.zones[zone_id] = Zone(zone_id, name, x, y, capacity, is_city)
 
         # Load adjacents
         for zone_id, filezone in filedata["zones"].items():
@@ -45,7 +46,7 @@ class Board():
 
     def print_zone_summary(self):
 
-        print("\n ==== BOARD STATE ====")
+        print("\n ==== BOARD STATE SUMMARY ====")
         print(f"{'Zone':18} {'ROME':>6} {'CARTHAGE':>10}")
         print("-" * 36)
 

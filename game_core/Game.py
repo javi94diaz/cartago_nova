@@ -8,7 +8,7 @@ from game_core.Player import Player
 from game_core.UnitType import UnitType
 from game_core.Unit import Unit
 from game_core.EventCard import EventCard
-
+from game_core.actions.MoveAction import MoveAction
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
@@ -143,6 +143,39 @@ class Game:
                 return player
         raise ValueError(f"[Game:get_player_by_faction] No player found for faction {faction}")
 
+    def choose_destination(self, unit):
+        print(f"[Game:choose_destination]")
+        print(f"Unit: {unit} - Choose a zone to move to: ")
+        zones_list = list(self.board.zones.values())
+        
+        for i, zone in enumerate(zones_list):
+            
+            if zone == unit.zone:
+                marker = "<- (HERE)" 
+            elif zone in unit.zone.adjacent:
+                marker = "-> (adjacent)"
+            else:
+                marker = ""
+            print(f"{i}: {zone} {marker}")
+        
+        while True:
+            try:
+                user_input = int(input("Enter the number of your destination: "))
+                if 0 <= user_input <= len(zones_list):
+                    destination = zones_list[user_input]
+
+                    # Validate user chose an adjacent zone
+                    if destination not in unit.zone.adjacent and destination != unit.zone:
+                        print ("Zone not valid. Please choose an adjacent zone.")
+                        continue
+
+                    return destination
+                else:
+                    print("Invalid number, please type again.")
+            except ValueError:
+                print("Invalid input, please type a number.")
+
+
     def resolve_initiative(self):
         
         user_input = None
@@ -185,6 +218,18 @@ class Game:
     def resolve_move_and_assault(self):
         print (f"[Game:resolve_move_and_assault]")
 
+        print (f"[Game:resolve_move_and_assault] {self.turn_manager.initiative_player} Move Step")
+
+        for unit in self.units:
+
+            destination = self.choose_destination(unit)
+            action = MoveAction(unit, unit.zone, destination)
+
+            try:
+                action.execute(self)
+            except ValueError as err:
+                print(f"[Game:resolve_move_and_assault] Invalid move {err}")
+
     def resolve_shoot(self):
         print (f"[Game:resolve_shoot]")
 
@@ -209,16 +254,19 @@ class Game:
                 self.resolve_event()
 
             elif phase == Phase.OIL_CHARGES:
-                self.resolve_oil_charges()
+                #self.resolve_oil_charges()
+                pass
 
             elif phase == Phase.MOVE_AND_ASSAULT:
                 self.resolve_move_and_assault()
 
             elif phase == Phase.SHOOT:
-                self.resolve_shoot()
+                #self.resolve_shoot()
+                pass
 
             elif phase == Phase.COMBAT:
-                self.resolve_combat()
+                #self.resolve_combat()
+                pass
 
             self.turn_manager.next_phase()
 
