@@ -8,12 +8,6 @@ class Board():
         self.load_map("resources/map.json")
         #self.print_zones()
 
-    def print_zones(self):
-        print("[Board:print_zones]")
-        for zone_name, zone in self.zones.items():
-            print(zone_name, end=", ")
-            print(zone)
-
     def load_map(self, filename):
         
         with open(filename, "r", encoding="utf-8") as file:
@@ -34,3 +28,11 @@ class Board():
                 neighbor = self.zones[neighbor_name]
                 zone.adjacent.add(neighbor) # Add neighbor to class set
                 neighbor.adjacent.add(zone) # Bidirectional relationship
+
+    def print_zones(self):
+        print("[Board:print_zones]")
+        for zone_name, zone in self.zones.items():
+            print(f"Zone {zone_name} has {len(zone.units)} unit/s")
+            
+            for unit in zone.units:
+                print (f" {unit}")
