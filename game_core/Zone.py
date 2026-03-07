@@ -1,8 +1,10 @@
 
 class Zone:
-    def __init__(self, name):
+    def __init__(self, name, x , y):
         print(f"[Zone] Create Zone {name}")
         self.name = name
+        self.x = x
+        self.y = y
         self.units = []
         self.adjacent = set()   # Neighbor zones
 

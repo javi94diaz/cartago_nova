@@ -9,18 +9,22 @@ class Tableboard():
         self.print_zones()
 
     def print_zones(self):
+        print("[Tableboard:print_zones]")
         for zone_name, zone in self.zones.items():
-            print(zone_name)
+            print(zone_name, end=", ")
+            print(zone)
 
     def load_map(self, filename):
         
         with open(filename, "r", encoding="utf-8") as file:
             filedata = json.load(file)
 
-        # Load zones
+        # Load and create zones
         for filezone in filedata["zones"]:
             name = filezone["name"]
-            self.zones[name] = Zone(name)
+            x = filezone["x"]
+            y = filezone["y"]
+            self.zones[name] = Zone(name, x, y)
 
         #Load adjacents
         for filezone in filedata["zones"]:

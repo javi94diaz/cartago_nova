@@ -7,10 +7,10 @@ from game_core.Unit import Unit
 
 class Game:
     def __init__(self):
-        print("[Game] Start Game")
+        print("[Game:__init__] Start Game")
         self.board = Tableboard()
 
-        print ("Vecinos")
+        print ("[Game:__init__] Vecinos")
         print (self.board.zones["Foro"].adjacent)
 
         self.players = [
@@ -34,7 +34,7 @@ class Game:
         ]
 
         self.units = []
-        #self.create_initial_units()
+        self.create_initial_units()
         self.turn_manager = TurnManager(self.players)
 
 
