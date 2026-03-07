@@ -9,6 +9,8 @@ from game_core.UnitType import UnitType
 from game_core.Unit import Unit
 from game_core.EventCard import EventCard
 from game_core.actions.MoveAction import MoveAction
+from game_core.actions.OilAction import OilAction
+from game_core.Wall import Wall
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
@@ -175,6 +177,33 @@ class Game:
             except ValueError:
                 print("Invalid input, please type a number.")
 
+    def choose_wall(self):
+        print(f"[Game:choose_wall]")
+        print(f"Choose a wall to heat oil into: ")
+        zones_list = list(self.board.zones.values())
+        wall_list = []
+        for zone in zones_list:
+            if isinstance(zone, Wall):
+                wall_list.append(zone)
+        
+        for i, wall in enumerate(wall_list):
+            print(f"{i}: {wall.name} {wall.oil_charges}")
+        
+        while True:
+            try:
+                user_input = int(input("Enter the number of a wall: "))
+                if 0 < user_input < len(wall_list):
+                    destination = wall_list[user_input]
+                    action = OilAction(destination)
+                    action.validate(self)
+                    return destination
+                    
+                else:
+                    print("Invalid number, please type again.")
+            except ValueError:
+                print("Invalid input, please type a number.")
+            except Exception as e:
+                print(f"Cannot select this wall: {e}")
 
     def resolve_initiative(self):
         
@@ -213,8 +242,20 @@ class Game:
 
 
     def resolve_oil_charges(self):
-        print (f"[Game:resolve_oil_charges]")
+        print("[Game:resolve_oil_charges]")
 
+        wall = self.choose_wall()
+        action = OilAction(wall)
+
+        try:
+            action.execute(self)
+        except Exception as e:
+            print(f"[Game:resolve_oil_charges] Error adding oil charges: {e}")
+
+        for zone in self.board.zones.values():
+            if isinstance(zone, Wall):
+                zone.advance_oil()
+ 
     def resolve_move_and_assault(self):
         print (f"[Game:resolve_move_and_assault]")
 
@@ -248,17 +289,19 @@ class Game:
             #self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE:
-                self.resolve_initiative()
+                #self.resolve_initiative()
+                pass #DONE
 
             elif phase == Phase.EVENT:
-                self.resolve_event()
+                #self.resolve_event()
+                pass #DONE
 
             elif phase == Phase.OIL_CHARGES:
-                #self.resolve_oil_charges()
-                pass
+                self.resolve_oil_charges() # BUG: se pasan automaticamente a ready sin quedarse un turno en heating
 
             elif phase == Phase.MOVE_AND_ASSAULT:
-                self.resolve_move_and_assault()
+                #self.resolve_move_and_assault()
+                pass # TODO: move first initiative player's units
 
             elif phase == Phase.SHOOT:
                 #self.resolve_shoot()

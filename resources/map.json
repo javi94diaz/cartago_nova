@@ -22,7 +22,10 @@
       "y": 50,
       "capacity": 1000,
       "adjacent": ["plain", "east_zone"],
-      "is_city": "True"
+      "is_city": "True",
+      "is_wall": "True",
+      "resistance": 3,
+      "bonus_defense": 3
     },
     "east_zone": {
       "name": "Zona Este",
@@ -62,7 +65,10 @@
       "y": 50,
       "capacity": 1000,
       "adjacent": ["lagoon", "north_zone"],
-      "is_city": "True"
+      "is_city": "True",
+      "is_wall": "True",
+      "resistance": 1,
+      "bonus_defense": 1
     },
     "north_zone": {
       "name": "Zona Norte",
@@ -102,7 +108,10 @@
       "y": 50,
       "capacity": 1000,
       "adjacent": ["south_zone", "port"],
-      "is_city": "True"
+      "is_city": "True",
+      "is_wall": "True",
+      "resistance": 2,
+      "bonus_defense": 2
     },
     "port": {
       "name": "Puerto",

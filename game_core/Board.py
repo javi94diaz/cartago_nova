@@ -1,5 +1,6 @@
 import json
 from game_core.Zone import Zone
+from game_core.Wall import Wall
 from game_core.Enum import Faction
 
 class Board():
@@ -17,13 +18,26 @@ class Board():
 
         # Load and create zones
         for zone_id, filezone in filedata["zones"].items():
-            name = filezone["name"]
-            x = filezone["x"]
-            y = filezone["y"]
-            capacity = filezone["capacity"]
-            is_city = filezone["is_city"]
+            
+            if filezone.get("is_wall"):
+                name = filezone["name"]
+                x = filezone["x"]
+                y = filezone["y"]
+                capacity = filezone["capacity"]
+                is_city = filezone["is_city"]
+                is_wall = filezone["is_wall"]
+                resistance = filezone["resistance"]
+                bonus_defense = filezone["bonus_defense"]
 
-            self.zones[zone_id] = Zone(zone_id, name, x, y, capacity, is_city)
+                self.zones[zone_id] = Wall(zone_id, name, x, y, capacity, resistance, bonus_defense, is_city)
+            else:
+                name = filezone["name"]
+                x = filezone["x"]
+                y = filezone["y"]
+                capacity = filezone["capacity"]
+                is_city = filezone["is_city"]
+
+                self.zones[zone_id] = Zone(zone_id, name, x, y, capacity, is_city)
 
         # Load adjacents
         for zone_id, filezone in filedata["zones"].items():
