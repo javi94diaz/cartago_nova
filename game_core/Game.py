@@ -17,12 +17,8 @@ class Game:
             Player("Diego", Faction.CARTHAGE)
         ]
 
-        self.unit_types = {
-            "velites": UnitType("Velites", 1, 1, 0),
-            "princeps": UnitType("Princeps", 1, 1, 0),
-            "numidian": UnitType("Numidian", 1, 1, 0),
-            "iberian_lancer": UnitType("Iberian Lancer", 1, 1, 0)
-        }
+        self.unit_types = {}
+        self.load_unit_types("resources/unit_types.json")
 
         self.initial_units = []
         self.load_initial_units("resources/initial_units.json")
@@ -64,6 +60,23 @@ class Game:
         self.turn_manager = TurnManager(self.players)
 
         self.main_loop()
+
+    def load_unit_types(self, filename):
+
+        with open(filename, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        for key, unit_data in data["unit_types"].items():
+
+            name = unit_data["name"]
+            max_health = unit_data["max_health"]
+            attack = unit_data["attack"]
+            shots = unit_data["shots"]
+
+            self.unit_types[key] = UnitType(name, max_health, attack, shots)
+
+        print("[Game:load_unit_types] Loaded unit types")
+        print(self.unit_types)
 
     def load_initial_units(self, filename):
         
