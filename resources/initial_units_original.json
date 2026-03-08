@@ -1,0 +1,100 @@
+{
+    "initial_units": [
+        {
+            "type": "velites",
+            "count": 4,
+            "faction": "ROME",
+            "zone": "camp"
+        },
+        {
+            "type": "princeps",
+            "count": 4,
+            "faction": "ROME",
+            "zone": "camp"
+        },
+        {
+            "type": "triarii",
+            "count": 2,
+            "faction": "ROME",
+            "zone": "camp"
+        },
+        {
+            "type": "sailors",
+            "count": 4,
+            "faction": "ROME",
+            "zone": "bay"
+        },
+        {
+            "type": "princeps",
+            "count": 2,
+            "faction": "ROME",
+            "zone": "bay"
+        },
+        {
+            "type": "velites",
+            "count": 1,
+            "faction": "ROME",
+            "zone": "land_tongue"
+        },
+        {
+            "type": "princeps",
+            "count": 1,
+            "faction": "ROME",
+            "zone": "land_tongue"
+        },
+        {
+            "type": "african_infantry",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "forum"
+        },
+        {
+            "type": "african_infantry",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "city_center"
+        },
+        {
+            "type": "iberian_lancers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "east_zone"
+        },
+        {
+            "type": "iberian_lancers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "south_zone"
+        },
+        {
+            "type": "iberian_lancers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "north_zone"
+        },
+        {
+            "type": "balearic_slingers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "east_wall"
+        },        
+        {
+            "type": "numidians",
+            "count": 2,
+            "faction": "CARTHAGE",
+            "zone": "east_wall"
+        },
+        {
+            "type": "balearic_slingers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "south_wall"
+        },        
+        {
+            "type": "numidians",
+            "count": 2,
+            "faction": "CARTHAGE",
+            "zone": "south_wall"
+        }
+    ]
+}

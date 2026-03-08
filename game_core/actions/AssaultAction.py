@@ -1,18 +1,50 @@
 from game_core.actions.Action import Action
+from game_core.Enum import Faction
 class AssaultAction(Action):
-    def __init__(self, game, attacker, defender, origin, destination):
-        pass
+    def __init__(self, unit, origin, destination):
+        self.unit = unit
+        self.origin = origin
+        self.destination = destination
 
     def validate(self, game):
-        pass
+        if self.destination not in self.origin.adjacent and self.destination != self.origin:
+            raise ValueError(f"[AssaultAction:validate] Destination is not adjacent to origin")
+            
+        enemy_found = False
+        
+        for unit in self.destination.units:
+            if unit.owner != self.unit.owner:
+                enemy_found = True
+                break
+
+        if not enemy_found:
+            raise ValueError(f"[AssaultAction:validate] No enemy units in destination zone")
+
+        if self.unit.engaged:
+            raise ValueError(f"[AssaultAction:validate] Unit already engaged")
+
+        if self.unit.owner.faction == Faction.CARTHAGE:
+            if self.origin.is_city and not self.destination.is_city:
+                raise ValueError(f"[AssaultAction:validate] Carthage cannot leave the city")
+            
+        if self.origin.id == "north_wall" and self.destination.id == "lagoon":
+            raise ValueError("[AssaultAction:validate] Cannot move from North Wall to Lagoon")
 
     def execute(self, game):
-        pass
+        
+        self.validate(game)
 
-#El AssaultAction:
-#Verifica que la zona destino es adyacente
-#Verifica que hay enemigo
-#Mueve la unidad
-#Crea un Engagement
-#Marca unidades como engaged
-#Esto te dará claridad enorme.
+        # Move the units
+        self.origin.units.remove(self.unit)
+        self.destination.units.append(self.unit)
+
+        self.unit.zone = self.destination
+        
+        print(f"[AssaultAction:execute] Unit {self.unit} assaulted {self.destination.name} zone")
+        
+        # Mark destination units as engaged
+        for unit in self.destination.units:
+            print(f"Unit {unit} is now engaged!")
+            unit.engaged = True
+            
+        # crear Engagement!

@@ -8,8 +8,9 @@ from game_core.Player import Player
 from game_core.UnitType import UnitType
 from game_core.Unit import Unit
 from game_core.EventCard import EventCard
-from game_core.actions.MoveAction import MoveAction
 from game_core.actions.OilAction import OilAction
+from game_core.actions.MoveAction import MoveAction
+from game_core.actions.AssaultAction import AssaultAction
 from game_core.Wall import Wall
 
 def clear_screen():
@@ -107,7 +108,6 @@ class Game:
 
             self.create_unit(unit_type, count, player, zone)
 
-
     def create_unit(self, unit_type, count, owner_player, zone):
         print (f"[Game:create_unit] Creating {count} {unit_type.name}/s for {owner_player.faction} in {zone.name}")
         
@@ -145,15 +145,23 @@ class Game:
                 return player
         raise ValueError(f"[Game:get_player_by_faction] No player found for faction {faction}")
 
-    def choose_destination(self, unit):
-        print(f"[Game:choose_destination]")
+    def zone_has_enemy_units(self, zone, player):
+
+        for unit in zone.units:
+            if unit.owner != player:
+                return True
+
+        return False
+
+    def choose_move_destination(self, unit):
+        print(f"[Game:choose_move_destination]  =============== MOVE =================")
         print(f"Unit: {unit} - Choose a zone to move to: ")
         zones_list = list(self.board.zones.values())
         
         for i, zone in enumerate(zones_list):
             
             if zone == unit.zone:
-                marker = "<- (HERE)" 
+                marker = "<--------------- (HERE)" 
             elif zone in unit.zone.adjacent:
                 marker = "-> (adjacent)"
             else:
@@ -175,6 +183,77 @@ class Game:
                     print("Invalid number, please type again.")
             except ValueError:
                 print("Invalid input, please type a number.")
+
+    def choose_assault_destination(self, unit, player):
+        print(f"[Game:choose_assault_destination] =============== ASSAULT =================")
+        print(f"Unit: {unit} - Choose a zone to assault: ")
+        zones_list = list(self.board.zones.values())
+
+        for i, zone in enumerate(zones_list):
+            
+            if zone == unit.zone:
+                marker = "<--------------- (HERE)" 
+            elif self.zone_has_enemy_units(zone, player):
+                marker = "-> (enemies)"
+            else:
+                marker = ""
+            print(f"{i}: {zone} {marker}")
+
+        while True:
+            try:
+                user_input = int(input("Enter the number of your destination: "))
+                if 0 <= user_input < len(zones_list):
+                    destination = zones_list[user_input]
+
+                    if destination not in unit.zone.adjacent and destination != unit.zone:
+                        print ("Zone not valid. Please choose an adjacent zone.")
+                        continue
+
+                    return destination
+                else:
+                    print("Invalid number, please type again.")
+            except ValueError:
+                print("Invalid input, please type a number.")
+
+
+    def get_other_player(self, initiative_player):
+        for player in self.players:
+            if player != initiative_player:
+                return player
+
+    def move_units_for_player(self, player):
+        
+        units_capable_of_moving = [unit for unit in player.units if not unit.engaged]
+        print(f"Units capable of moving: {units_capable_of_moving}")
+        for unit in units_capable_of_moving:
+
+            while True:
+                origin = unit.zone
+                destination = self.choose_move_destination(unit)
+                action = MoveAction(unit, origin, destination)
+
+                try:
+                    action.execute(self)
+                    break
+                except ValueError as err:
+                    print(f"[Game:move_units_for_player] Invalid move {err}. Choose another destination.")
+
+    def assault_units_for_player(self, player):
+        
+        units_capable_of_assaulting = [unit for unit in player.units if not unit.engaged]
+        print(f"Units capable of assaulting: {units_capable_of_assaulting}")
+        for unit in units_capable_of_assaulting:
+
+            while True:
+                origin = unit.zone
+                destination = self.choose_assault_destination(unit, player)
+                action = AssaultAction(unit, origin, destination)
+
+                try:
+                    action.execute(self)
+                    break
+                except ValueError as err:
+                    print(f"[Game:assault_units_for_player] Invalid assault {err}. Choose another destination.")
 
     def choose_wall(self):
         print(f"[Game:choose_wall]")
@@ -239,7 +318,6 @@ class Game:
         
         print(f"{len(self.event_cards)}/{len(self.initial_event_cards)} event cards remaining")
 
-
     def resolve_oil_charges(self):
         print("[Game:resolve_oil_charges]")
 
@@ -256,22 +334,16 @@ class Game:
         except Exception as e:
             print(f"[Game:resolve_oil_charges] Error adding oil charges: {e}")
 
-
- 
     def resolve_move_and_assault(self):
-        print (f"[Game:resolve_move_and_assault]")
+        print (f"[Game:resolve_move_and_assault] ====== MOVE AND ASSAULT ======")
 
-        print (f"[Game:resolve_move_and_assault] {self.turn_manager.initiative_player} Move Step")
+        initiative_player = self.turn_manager.initiative_player
+        other_player = self.get_other_player(initiative_player)
 
-        for unit in self.units:
-
-            destination = self.choose_destination(unit)
-            action = MoveAction(unit, unit.zone, destination)
-
-            try:
-                action.execute(self)
-            except ValueError as err:
-                print(f"[Game:resolve_move_and_assault] Invalid move {err}")
+        self.move_units_for_player(initiative_player)
+        self.assault_units_for_player(initiative_player)
+        self.move_units_for_player(other_player)
+        self.assault_units_for_player(other_player)
 
     def resolve_shoot(self):
         print (f"[Game:resolve_shoot]")
@@ -292,19 +364,19 @@ class Game:
             #self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE: # [OK] DONE
-                #self.resolve_initiative()
-                pass
+                self.resolve_initiative()
+                #pass
 
             elif phase == Phase.EVENT: # [OK] DONE
-                #self.resolve_event()
+                self.resolve_event()
                 pass
 
             elif phase == Phase.OIL_CHARGES: # [OK] DONE
-                self.resolve_oil_charges()
+                #self.resolve_oil_charges()
                 pass 
 
             elif phase == Phase.MOVE_AND_ASSAULT:
-                #self.resolve_move_and_assault()
+                self.resolve_move_and_assault()
                 pass # TODO: move first initiative player's units
 
             elif phase == Phase.SHOOT:

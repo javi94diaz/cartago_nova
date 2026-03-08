@@ -7,11 +7,13 @@ class MoveAction(Action):
         self.destination = destination
 
     def validate(self, game):
+        if self.unit.engaged and self.origin != self.destination:
+            raise ValueError(f"[MoveAction:validate] Unit is engaged and cannot move")
+        
         if self.destination not in self.origin.adjacent and self.destination != self.origin:
             raise ValueError(f"[MoveAction:validate] Destination is not adjacent to origin")
 
         for unit in self.destination.units:
-            #if unit.owner != self.unit.owner:
             if unit.zone == self.destination and unit.owner != self.unit.owner:
                 raise ValueError(f"[MoveAction:validate] Enemy units present in destination")
             
@@ -30,3 +32,4 @@ class MoveAction(Action):
         self.destination.units.append(self.unit)
 
         self.unit.zone = self.destination
+        print(f"[MoveAction:execute] Unit {self.unit} moved from {self.origin} to {self.destination.name}")
