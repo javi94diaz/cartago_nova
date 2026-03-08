@@ -163,10 +163,9 @@ class Game:
         while True:
             try:
                 user_input = int(input("Enter the number of your destination: "))
-                if 0 <= user_input <= len(zones_list):
+                if 0 <= user_input < len(zones_list):
                     destination = zones_list[user_input]
 
-                    # Validate user chose an adjacent zone
                     if destination not in unit.zone.adjacent and destination != unit.zone:
                         print ("Zone not valid. Please choose an adjacent zone.")
                         continue
@@ -185,14 +184,14 @@ class Game:
         for zone in zones_list:
             if isinstance(zone, Wall):
                 wall_list.append(zone)
-        
+
         for i, wall in enumerate(wall_list):
             print(f"{i}: {wall.name} {wall.oil_charges}")
         
         while True:
             try:
                 user_input = int(input("Enter the number of a wall: "))
-                if 0 < user_input < len(wall_list):
+                if 0 <= user_input < len(wall_list):
                     destination = wall_list[user_input]
                     action = OilAction(destination)
                     action.validate(self)
@@ -244,17 +243,20 @@ class Game:
     def resolve_oil_charges(self):
         print("[Game:resolve_oil_charges]")
 
+        for zone in self.board.zones.values():
+            if isinstance(zone, Wall):
+                zone.advance_oil()
+
         wall = self.choose_wall()
         action = OilAction(wall)
 
         try:
             action.execute(self)
+            print(f"{wall.name}: {wall.oil_charges}")
         except Exception as e:
             print(f"[Game:resolve_oil_charges] Error adding oil charges: {e}")
 
-        for zone in self.board.zones.values():
-            if isinstance(zone, Wall):
-                zone.advance_oil()
+
  
     def resolve_move_and_assault(self):
         print (f"[Game:resolve_move_and_assault]")
@@ -283,21 +285,23 @@ class Game:
 
             #clear_screen()
             phase = self.turn_manager.phase
-
+            print(f"[Game:main_loop] Phase: {phase}")
+            
             #self.board.print_zone_basic()
             self.board.print_zone_summary()
             #self.board.print_zone_detailed()
             
-            if phase == Phase.INITIATIVE:
+            if phase == Phase.INITIATIVE: # [OK] DONE
                 #self.resolve_initiative()
-                pass #DONE
+                pass
 
-            elif phase == Phase.EVENT:
+            elif phase == Phase.EVENT: # [OK] DONE
                 #self.resolve_event()
-                pass #DONE
+                pass
 
-            elif phase == Phase.OIL_CHARGES:
-                self.resolve_oil_charges() # BUG: se pasan automaticamente a ready sin quedarse un turno en heating
+            elif phase == Phase.OIL_CHARGES: # [OK] DONE
+                self.resolve_oil_charges()
+                pass 
 
             elif phase == Phase.MOVE_AND_ASSAULT:
                 #self.resolve_move_and_assault()

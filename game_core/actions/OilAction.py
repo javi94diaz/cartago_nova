@@ -8,6 +8,7 @@ class OilAction(Action):
     def validate(self, game):
         if not isinstance(self.wall, Wall):
             raise ValueError("Selected zone is not a wall")
+        
         if any(status=="heating" for status in self.wall.oil_charges):
             raise ValueError("This wall already has oil heating")
 
