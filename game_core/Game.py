@@ -167,10 +167,19 @@ class Game:
             else:
                 marker = ""
             print(f"{i}: {zone} {marker}")
+        print("ENTER - Stay in current area")
         
         while True:
             try:
-                user_input = int(input("Enter the number of your destination: "))
+                user_input = input("Enter the number of your destination: ")
+                
+                if user_input == "":
+                    return unit.zone # Stay in the same zone  
+                
+                print(f"user_input no vacia: {user_input}")
+
+                user_input = int(user_input)
+
                 if 0 <= user_input < len(zones_list):
                     destination = zones_list[user_input]
 
@@ -198,10 +207,20 @@ class Game:
             else:
                 marker = ""
             print(f"{i}: {zone} {marker}")
+        print("ENTER - Skip assault")
 
         while True:
             try:
-                user_input = int(input("Enter the number of your destination: "))
+                
+                user_input = input("Enter the number of the zone to assault: ")
+                
+                if user_input == "":
+                    return unit.zone # Stay in the same zone  
+                
+                print(f"user_input no vacia: {user_input}")
+
+                user_input = int(user_input)
+                
                 if 0 <= user_input < len(zones_list):
                     destination = zones_list[user_input]
 
@@ -224,7 +243,7 @@ class Game:
     def move_units_for_player(self, player):
         
         units_capable_of_moving = [unit for unit in player.units if not unit.engaged]
-        print(f"Units capable of moving: {units_capable_of_moving}")
+        print(f"Units capable of moving:\n {units_capable_of_moving}")
         for unit in units_capable_of_moving:
 
             while True:
@@ -241,19 +260,29 @@ class Game:
     def assault_units_for_player(self, player):
         
         units_capable_of_assaulting = [unit for unit in player.units if not unit.engaged]
-        print(f"Units capable of assaulting: {units_capable_of_assaulting}")
+        # units_capable_of_assaulting = [
+        #     unit for unit in player.units
+        #     if unit.alive and not unit.engaged
+        #     ]
+        print(f"Units capable of assaulting:\n {units_capable_of_assaulting}")
         for unit in units_capable_of_assaulting:
 
             while True:
                 origin = unit.zone
                 destination = self.choose_assault_destination(unit, player)
-                action = AssaultAction(unit, origin, destination)
 
-                try:
-                    action.execute(self)
+                if destination != origin:
+
+                    action = AssaultAction(unit, origin, destination)
+
+                    try:
+                        action.execute(self)
+                        break
+                    except ValueError as err:
+                        print(f"[Game:assault_units_for_player] Invalid assault {err}. Choose another destination.")
+                else:
+                    print (f"Unit {unit} skipped assault")
                     break
-                except ValueError as err:
-                    print(f"[Game:assault_units_for_player] Invalid assault {err}. Choose another destination.")
 
     def choose_wall(self):
         print(f"[Game:choose_wall]")
@@ -364,11 +393,11 @@ class Game:
             #self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE: # [OK] DONE
-                self.resolve_initiative()
-                #pass
+                #self.resolve_initiative()
+                pass
 
             elif phase == Phase.EVENT: # [OK] DONE
-                self.resolve_event()
+                #self.resolve_event()
                 pass
 
             elif phase == Phase.OIL_CHARGES: # [OK] DONE
@@ -377,7 +406,7 @@ class Game:
 
             elif phase == Phase.MOVE_AND_ASSAULT:
                 self.resolve_move_and_assault()
-                pass # TODO: move first initiative player's units
+                pass
 
             elif phase == Phase.SHOOT:
                 #self.resolve_shoot()
