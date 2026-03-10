@@ -53,7 +53,7 @@
       "effect": "Los líderes no pueden activarse este turno."
     },
     "extreme_fatigue": {
-      "title": "Fatiga extrem",
+      "title": "Fatiga extrema",
       "effect": "Cada unidad tira -1 dado este turno."
     },
     "no_quarter": {

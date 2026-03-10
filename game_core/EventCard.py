@@ -8,4 +8,7 @@ class EventCard:
 
     def __repr__(self):
         return f"<EventCard {self.title}>"
+    
+    def apply_effect(self):
+        pass
         
