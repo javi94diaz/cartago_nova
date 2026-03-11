@@ -19,8 +19,6 @@ class Unit:
         self.number = Unit._type_counters[name]
 
         self.health = unit_type.max_health
-        self.current_health = unit_type.max_health
-        # self.has_moved = False
         self.engaged = False
         self.alive = True
 
