@@ -4,7 +4,7 @@ class TurnManager:
     def __init__(self, players):
         print(f"[TurnManager] Create TurnManager with {len(players)} players")
         self.turn = 0
-        self.max_turns = 8
+        self.max_turns = 3 # TODO: Set back to 8 max_turns. 3 for testing purposes.
         self.players = players
         self.initiative_player = players[0]
         self.next_turn()
