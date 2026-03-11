@@ -1,11 +1,23 @@
 from game_core.Zone import Zone
 
 class Wall(Zone):
-    def __init__(self, id, name, x, y, capacity, resistance, bonus_defense, is_city=True):
+    def __init__(self, id, name, x, y, capacity, resistance, bonus_defense, is_wall, is_city=True):
         super().__init__(id, name, x, y, capacity, is_city)
         self.resistance = resistance
         self.bonus_defense = bonus_defense
         self.oil_charges = []  # "heating" or "ready"
+        self.is_wall = is_wall
+
+    def get_save_number(self):
+
+        if self.resistance == 3:
+            return 4
+        elif self.resistance == 2:
+            return 5
+        elif self.resistance == 1:
+            return 6
+        else:
+            return None # TODO: Revisar si conviene devolver 7, que nunca se alcanza en 1D6
 
     def heat_oil(self):
         self.oil_charges.append("heating")
@@ -18,3 +30,4 @@ class Wall(Zone):
         self.oil_charges = [status for status in self.oil_charges if status != "ready"]
         # Add combat effect!
         return ready_charges
+    

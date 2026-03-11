@@ -29,7 +29,7 @@ class Board():
                 resistance = filezone["resistance"]
                 bonus_defense = filezone["bonus_defense"]
 
-                self.zones[zone_id] = Wall(zone_id, name, x, y, capacity, resistance, bonus_defense, is_city)
+                self.zones[zone_id] = Wall(zone_id, name, x, y, capacity, resistance, bonus_defense, is_city, is_wall)
             else:
                 name = filezone["name"]
                 x = filezone["x"]

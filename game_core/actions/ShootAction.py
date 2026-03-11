@@ -1,5 +1,7 @@
 from game_core.actions.Action import Action
 from game_core.Dice import Dice
+from game_core.Enum import Faction
+from game_core.Wall import Wall
 
 class ShootAction(Action):
     def __init__(self, shooter, target):
@@ -8,8 +10,12 @@ class ShootAction(Action):
         self.origin = shooter.zone
         self.destination = target.zone
 
-        self.rolls = []
+        self.hit_rolls = []
         self.hits = {}
+
+        self.save_rolls = []
+
+        self.saved = 0
 
     def __repr__(self):
         return f"<ShootAction {self.shooter} {self.target}>"
@@ -17,6 +23,23 @@ class ShootAction(Action):
     def validate(self):
 
         print(f"[ShootAction:validate]")
+
+        if self.shooter.type.shots == 0:
+            raise ValueError(f"[ShootAction:validate] Unit cannot shoot")
+
+        # if self.target.owner == self.shooter.owner:
+        #     raise ValueError(f"[ShootAction:validate] Cannot shoot friendly unit")
+
+        # if self.target.zone not in self.shooter.zone.adjacent:
+        #     raise ValueError(f"[ShootAction:validate] Target not in range")
+
+    def target_has_save_roll(self):
+        
+        return ( 
+            self.target.owner.faction == Faction.CARTHAGE
+            and self.target.zone.is_wall
+            and self.target.zone.resistance > 0
+            )
 
     def execute(self):
         
@@ -27,6 +50,7 @@ class ShootAction(Action):
         for shot in range (0, self.shooter.type.shots):
 
             roll = Dice.d6()
+            self.hit_rolls.append(roll)
             print(f"Shot {shot} from {self.shooter} throws D6 and gets: {roll}")
 
             if roll >= self.shooter.type.hit_number:
@@ -44,8 +68,29 @@ class ShootAction(Action):
 
         for unit, damage in self.hits.items():
 
-            unit.health -= damage
-            print(f"Unit {unit} takes {damage} damage points")
+            final_damage = 0
+
+            for i in range(damage):
+
+                if self.target_has_save_roll():
+                    print(f"Unit {unit} has save roll")
+                    save_number = unit.zone.get_save_number()
+
+                    roll = Dice.d6()
+                    self.save_rolls.append(roll)
+
+                    print(f"[ShootAction:apply_damage] {unit} attempts wall save: rolled {roll} (needs {save_number})")
+
+                    if roll >= save_number:
+                        print(f"[ShootAction:execute] {unit} saved the hit!")
+                    else:
+                        print(f"[ShootAction:execute] Save failed")
+                        final_damage += 1
+                else:
+                    final_damage +=1
+            # end for
+            unit.health -= final_damage
+            print(f"Unit {unit} takes {final_damage} damage points")
 
             if unit.health <= 0:
                 print(f"Unit {unit} dies from shots!")

@@ -12,7 +12,6 @@ from game_core.actions.OilAction import OilAction
 from game_core.actions.MoveAction import MoveAction
 from game_core.actions.AssaultAction import AssaultAction
 from game_core.actions.ShootAction import ShootAction
-from game_core.Dice import Dice
 from game_core.Wall import Wall
 
 def clear_screen():
@@ -316,15 +315,15 @@ class Game:
         
         shoot_actions = []
 
-        shooters = [unit for unit in player_1.units if unit.type.shots > 0]
-        print(f"[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
+        shooters = [unit for unit in player_1.units if unit.alive and unit.type.shots > 0]
+        print(f"\n\n[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
 
         for shooter in shooters:
             
-            # Targets: enemies in shooter's zone or adjacent zones
+            # Targets: alive enemies in shooter's zone or adjacent zones
             targets = [
                 unit for unit in player_2.units
-                if unit.zone == shooter.zone or unit.zone in shooter.zone.adjacent
+                if unit.alive and (unit.zone == shooter.zone or unit.zone in shooter.zone.adjacent)
             ]
             
             if not targets:
@@ -343,8 +342,6 @@ class Game:
                     if user_input == "":
                         print (f"Unit {shooter} skipped shooting.")
                         break
-                    
-                    print(f"user_input no vacia: {user_input}")
 
                     user_input = int(user_input)
 
@@ -438,11 +435,11 @@ class Game:
         other_player = self.get_other_player(initiative_player)
 
         shoot_actions = self.select_shoot_targets(initiative_player, other_player)
-        print(f"[Game:resolve_shoot_phase] Shoot actions (partial): {shoot_actions}")
-        
         shoot_actions += self.select_shoot_targets(other_player, initiative_player)
     
-        print(f"[Game:resolve_shoot_phase] Shoot actions (complete): {shoot_actions}")
+        print(f"[Game:resolve_shoot_phase] Shoot actions")
+        for action in shoot_actions:
+            print(f"\t{action}")
 
         for action in shoot_actions:
             action.execute()
