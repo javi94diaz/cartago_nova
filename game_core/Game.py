@@ -242,8 +242,9 @@ class Game:
 
     def move_units_for_player(self, player):
         
-        units_capable_of_moving = [unit for unit in player.units if not unit.engaged]
+        units_capable_of_moving = [unit for unit in player.units if unit.alive and not unit.engaged]
         print(f"Units capable of moving:\n {units_capable_of_moving}")
+
         for unit in units_capable_of_moving:
 
             while True:
@@ -259,12 +260,9 @@ class Game:
 
     def assault_units_for_player(self, player):
         
-        units_capable_of_assaulting = [unit for unit in player.units if not unit.engaged]
-        # units_capable_of_assaulting = [
-        #     unit for unit in player.units
-        #     if unit.alive and not unit.engaged
-        #     ]
+        units_capable_of_assaulting = [unit for unit in player.units if unit.alive and not unit.engaged]
         print(f"Units capable of assaulting:\n {units_capable_of_assaulting}")
+
         for unit in units_capable_of_assaulting:
 
             while True:
