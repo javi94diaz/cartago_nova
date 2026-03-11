@@ -2,11 +2,14 @@ from game_core.actions.Action import Action
 from game_core.Enum import Faction
 
 class ShootAction(Action):
-    def __init__(self, shooter_unit, target_unit, origin, destination):
-        self.shooter = shooter_unit
-        self.target = target_unit
-        self.origin = origin
-        self.destination = destination
+    def __init__(self, shooter, target):
+        self.shooter = shooter
+        self.target = target
+        self.origin = shooter.zone
+        self.destination = target.zone
+
+        self.rolls = []
+        self.hits = 0
 
     def validate(self, game):
         pass

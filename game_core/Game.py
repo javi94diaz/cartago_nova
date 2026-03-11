@@ -11,6 +11,8 @@ from game_core.EventCard import EventCard
 from game_core.actions.OilAction import OilAction
 from game_core.actions.MoveAction import MoveAction
 from game_core.actions.AssaultAction import AssaultAction
+from game_core.actions.ShootAction import ShootAction
+from game_core.Dice import Dice
 from game_core.Wall import Wall
 
 def clear_screen():
@@ -55,8 +57,9 @@ class Game:
             max_health = unit_data["max_health"]
             attack = unit_data["attack"]
             shots = unit_data["shots"]
+            hit_number = unit_data.get("hit_number", 7) # Optional, 7 if not found in JSON
 
-            self.unit_types[key] = UnitType(name, max_health, attack, shots)
+            self.unit_types[key] = UnitType(name, max_health, attack, shots, hit_number)
 
         print(f"[Game:load_unit_types] Loaded {len(self.unit_types)} unit types")
         # for key, value in self.unit_types.items():
@@ -145,6 +148,39 @@ class Game:
                 return player
         raise ValueError(f"[Game:get_player_by_faction] No player found for faction {faction}")
 
+    def choose_wall(self):
+        print(f"[Game:choose_wall]")
+        print(f"Choose a wall to heat oil into: ")
+        zones_list = list(self.board.zones.values())
+        wall_list = []
+        for zone in zones_list:
+            if isinstance(zone, Wall):
+                wall_list.append(zone)
+
+        for i, wall in enumerate(wall_list):
+            print(f"{i}: {wall.name} {wall.oil_charges}")
+        
+        while True:
+            try:
+                user_input = int(input("Enter the number of a wall: "))
+                if 0 <= user_input < len(wall_list):
+                    destination = wall_list[user_input]
+                    action = OilAction(destination)
+                    action.validate(self)
+                    return destination
+                    
+                else:
+                    print("Invalid number, please type again.")
+            except ValueError:
+                print("Invalid input, please type a number.")
+            except Exception as e:
+                print(f"Cannot select this wall: {e}")
+
+    def get_other_player(self, initiative_player):
+        for player in self.players:
+            if player != initiative_player:
+                return player
+
     def zone_has_enemy_units(self, zone, player):
 
         for unit in zone.units:
@@ -174,7 +210,7 @@ class Game:
                 user_input = input("Enter the number of your destination: ")
                 
                 if user_input == "":
-                    return unit.zone # Stay in the same zone  
+                    return unit.zone # Stay in the same zone
                 
                 print(f"user_input no vacia: {user_input}")
 
@@ -192,6 +228,24 @@ class Game:
                     print("Invalid number, please type again.")
             except ValueError:
                 print("Invalid input, please type a number.")
+
+    def move_units_for_player(self, player):
+        
+        units_capable_of_moving = [unit for unit in player.units if unit.alive and not unit.engaged]
+        print(f"Units capable of moving:\n {units_capable_of_moving}")
+
+        for unit in units_capable_of_moving:
+
+            while True:
+                origin = unit.zone
+                destination = self.choose_move_destination(unit)
+                action = MoveAction(unit, origin, destination)
+
+                try:
+                    action.execute(self)
+                    break
+                except ValueError as err:
+                    print(f"[Game:move_units_for_player] Invalid move {err}. Choose another destination.")
 
     def choose_assault_destination(self, unit, player):
         print(f"[Game:choose_assault_destination] =============== ASSAULT =================")
@@ -234,30 +288,6 @@ class Game:
             except ValueError:
                 print("Invalid input, please type a number.")
 
-
-    def get_other_player(self, initiative_player):
-        for player in self.players:
-            if player != initiative_player:
-                return player
-
-    def move_units_for_player(self, player):
-        
-        units_capable_of_moving = [unit for unit in player.units if unit.alive and not unit.engaged]
-        print(f"Units capable of moving:\n {units_capable_of_moving}")
-
-        for unit in units_capable_of_moving:
-
-            while True:
-                origin = unit.zone
-                destination = self.choose_move_destination(unit)
-                action = MoveAction(unit, origin, destination)
-
-                try:
-                    action.execute(self)
-                    break
-                except ValueError as err:
-                    print(f"[Game:move_units_for_player] Invalid move {err}. Choose another destination.")
-
     def assault_units_for_player(self, player):
         
         units_capable_of_assaulting = [unit for unit in player.units if unit.alive and not unit.engaged]
@@ -282,36 +312,95 @@ class Game:
                     print (f"Unit {unit} skipped assault")
                     break
 
-    def choose_wall(self):
-        print(f"[Game:choose_wall]")
-        print(f"Choose a wall to heat oil into: ")
-        zones_list = list(self.board.zones.values())
-        wall_list = []
-        for zone in zones_list:
-            if isinstance(zone, Wall):
-                wall_list.append(zone)
-
-        for i, wall in enumerate(wall_list):
-            print(f"{i}: {wall.name} {wall.oil_charges}")
+    def select_shoot_targets(self, player_1, player_2):
         
-        while True:
-            try:
-                user_input = int(input("Enter the number of a wall: "))
-                if 0 <= user_input < len(wall_list):
-                    destination = wall_list[user_input]
-                    action = OilAction(destination)
-                    action.validate(self)
-                    return destination
+        shoot_actions = [] # List of tuples (shooter, target)
+
+        shooters = [unit for unit in player_1.units if unit.type.shots > 0]
+        print(f"[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
+
+        for shooter in shooters:
+            
+            # Targets: enemies in shooter's zone or adjacent zones
+            targets = [
+                unit for unit in player_2.units
+                if unit.zone == shooter.zone or unit.zone in shooter.zone.adjacent
+            ]
+            
+            if not targets:
+                print(f"[Game:select_shoot_targets] Shooter {shooter} has no targets on sight")
+                continue
+
+            print(f"Targets found: {targets}")
+
+            for i, target in enumerate(targets):
+                print(f"{i}: {target} ({target.zone})")
+
+            while True:
+                try:
+                    user_input = input(f"Enter target unit number for {shooter} (Enter to skip): ")
                     
-                else:
-                    print("Invalid number, please type again.")
-            except ValueError:
-                print("Invalid input, please type a number.")
-            except Exception as e:
-                print(f"Cannot select this wall: {e}")
+                    if user_input == "":
+                        print (f"Unit {shooter} skipped shooting.")
+                        break
+                    
+                    print(f"user_input no vacia: {user_input}")
 
-    def resolve_initiative(self):
+                    user_input = int(user_input)
+
+                    if 0 <= user_input < len(targets):
+                        target = targets[user_input]
+                        print(f"Target selected: {target}")
+                        shoot_actions.append((shooter, target))
+                        print(f"Added shoot action: {(shooter, target)}")
+                        break
+                    else:
+                        print("Invalid number, please type again.")
+                except ValueError:
+                    print("Invalid input, please type a number.")
+            # end while
+        # end for
+        return shoot_actions
+
+    def resolve_shoot_actions(self, shoot_actions):
         
+        hits = {}
+
+        for shooter, target in shoot_actions:
+            print(f"[Game:resolve_shoot_actions] Shooter: {shooter} | Target: {target}")
+            for shot in range (0, shooter.type.shots):
+
+                roll = Dice.d6()
+                print(f"Shot {shot} from {shooter} throws D6 and gets: {roll}")
+    
+                if roll >= shooter.type.hit_number:
+                    print (f"Shooter {shooter} hits target {target}")
+
+                    if target not in hits:
+                        hits[target] = 0
+                    
+                    hits[target] +=1
+            # end for
+        # end for
+        return hits
+    
+    def apply_shoot_damage(self, hits):
+
+        for unit, damage in hits.items():
+
+            unit.health -= damage
+            print(f"Unit {unit} takes {damage} damage points")
+
+            if unit.health <= 0:
+                print(f"Unit {unit} dies from shots!")
+                unit.alive = False
+                #unit.zone = None # TODO: Revisar si interesa, o dejarlo para saber dónde ha muerto la unidad
+                unit.zone.units.remove(unit)
+
+    def resolve_initiative_phase(self):
+        
+        print("[Game:resolve_initiative] ====== INITIATIVE ======")
+
         user_input = None
         while (user_input != "yes" and user_input != "no"):
             print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player}: Maintain initiative?: ")
@@ -329,8 +418,10 @@ class Game:
                 self.turn_manager.initiative_player = self.players[0]
                 print (f"[Game:resolve_initiative] {self.turn_manager.initiative_player} gets initiative")
 
-    def resolve_event(self):
-        
+    def resolve_event_phase(self):
+
+        print("[Game:resolve_event] ====== EVENT ======")
+
         if (len(self.event_cards) == 0):
             self.event_cards = self.initial_event_cards.copy()
             print("self.event_cards")
@@ -345,8 +436,9 @@ class Game:
         
         print(f"{len(self.event_cards)}/{len(self.initial_event_cards)} event cards remaining")
 
-    def resolve_oil_charges(self):
-        print("[Game:resolve_oil_charges]")
+    def resolve_oil_charges_phase(self):
+
+        print("[Game:resolve_oil_charges] ====== OIL CHARGES ======")
 
         for zone in self.board.zones.values():
             if isinstance(zone, Wall):
@@ -361,7 +453,8 @@ class Game:
         except Exception as e:
             print(f"[Game:resolve_oil_charges] Error adding oil charges: {e}")
 
-    def resolve_move_and_assault(self):
+    def resolve_move_and_assault_phase(self):
+
         print (f"[Game:resolve_move_and_assault] ====== MOVE AND ASSAULT ======")
 
         initiative_player = self.turn_manager.initiative_player
@@ -372,11 +465,22 @@ class Game:
         self.move_units_for_player(other_player)
         self.assault_units_for_player(other_player)
 
-    def resolve_shoot(self):
-        print (f"[Game:resolve_shoot]")
+    def resolve_shoot_phase(self):
 
-    def resolve_combat(self):
-        print (f"[Game:resolve_combat]")
+        print (f"[Game:resolve_shoot] ====== SHOOT ======")
+
+        initiative_player = self.turn_manager.initiative_player
+        other_player = self.get_other_player(initiative_player)
+
+        shoot_actions = self.select_shoot_targets(initiative_player, other_player)
+        shoot_actions += self.select_shoot_targets(other_player, initiative_player)
+    
+        hits = self.resolve_shoot_actions(shoot_actions)
+        self.apply_shoot_damage(hits)
+
+    def resolve_combat_phase(self):
+
+        print (f"[Game:resolve_combat] ====== COMBAT ======")
 
     def main_loop(self):
 
@@ -391,27 +495,27 @@ class Game:
             #self.board.print_zone_detailed()
             
             if phase == Phase.INITIATIVE: # [OK] DONE
-                #self.resolve_initiative()
+                #self.resolve_initiative_phase()
                 pass
 
             elif phase == Phase.EVENT: # [OK] DONE
-                #self.resolve_event()
+                #self.resolve_event_phase()
                 pass
 
             elif phase == Phase.OIL_CHARGES: # [OK] DONE
-                #self.resolve_oil_charges()
+                #self.resolve_oil_charges_phase()
                 pass 
 
             elif phase == Phase.MOVE_AND_ASSAULT:
-                self.resolve_move_and_assault()
+                #self.resolve_move_and_assault_phase()
                 pass
 
             elif phase == Phase.SHOOT:
-                #self.resolve_shoot()
+                self.resolve_shoot_phase()
                 pass
 
             elif phase == Phase.COMBAT:
-                #self.resolve_combat()
+                #self.resolve_combat_phase()
                 pass
 
             self.turn_manager.next_phase()
