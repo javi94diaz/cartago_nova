@@ -158,7 +158,7 @@ class Game:
                 wall_list.append(zone)
 
         for i, wall in enumerate(wall_list):
-            print(f"{i}: {wall.name} {wall.oil_charges}")
+            print(f"\t{i}: {wall.name} {wall.oil_charges}")
         
         while True:
             try:
@@ -166,7 +166,7 @@ class Game:
                 if 0 <= user_input < len(wall_list):
                     destination = wall_list[user_input]
                     action = OilAction(destination)
-                    action.validate(self)
+                    action.validate()
                     return destination
                     
                 else:
@@ -202,7 +202,7 @@ class Game:
                 marker = "-> (adjacent)"
             else:
                 marker = ""
-            print(f"{i}: {zone} {marker}")
+            print(f"\t{i}: {zone} {marker}")
         print("ENTER - Stay in current area")
         
         while True:
@@ -242,7 +242,7 @@ class Game:
                 action = MoveAction(unit, origin, destination)
 
                 try:
-                    action.execute(self)
+                    action.execute()
                     break
                 except ValueError as err:
                     print(f"[Game:move_units_for_player] Invalid move {err}. Choose another destination.")
@@ -260,7 +260,7 @@ class Game:
                 marker = "-> (enemies)"
             else:
                 marker = ""
-            print(f"{i}: {zone} {marker}")
+            print(f"\t{i}: {zone} {marker}")
         print("ENTER - Skip assault")
 
         while True:
@@ -304,7 +304,7 @@ class Game:
                     action = AssaultAction(unit, origin, destination)
 
                     try:
-                        action.execute(self)
+                        action.execute()
                         break
                     except ValueError as err:
                         print(f"[Game:assault_units_for_player] Invalid assault {err}. Choose another destination.")
@@ -314,7 +314,7 @@ class Game:
 
     def select_shoot_targets(self, player_1, player_2):
         
-        shoot_actions = [] # List of tuples (shooter, target)
+        shoot_actions = []
 
         shooters = [unit for unit in player_1.units if unit.type.shots > 0]
         print(f"[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
@@ -334,7 +334,7 @@ class Game:
             print(f"Targets found: {targets}")
 
             for i, target in enumerate(targets):
-                print(f"{i}: {target} ({target.zone})")
+                print(f"\t{i}: {target} ({target.zone})")
 
             while True:
                 try:
@@ -351,8 +351,8 @@ class Game:
                     if 0 <= user_input < len(targets):
                         target = targets[user_input]
                         print(f"Target selected: {target}")
-                        shoot_actions.append((shooter, target))
-                        print(f"Added shoot action: {(shooter, target)}")
+                        shoot_actions.append(ShootAction(shooter, target))
+                        print(f"Added shoot action:\n\t {(shooter, target)}")
                         break
                     else:
                         print("Invalid number, please type again.")
@@ -361,41 +361,6 @@ class Game:
             # end while
         # end for
         return shoot_actions
-
-    def resolve_shoot_actions(self, shoot_actions):
-        
-        hits = {}
-
-        for shooter, target in shoot_actions:
-            print(f"[Game:resolve_shoot_actions] Shooter: {shooter} | Target: {target}")
-            for shot in range (0, shooter.type.shots):
-
-                roll = Dice.d6()
-                print(f"Shot {shot} from {shooter} throws D6 and gets: {roll}")
-    
-                if roll >= shooter.type.hit_number:
-                    print (f"Shooter {shooter} hits target {target}")
-
-                    if target not in hits:
-                        hits[target] = 0
-                    
-                    hits[target] +=1
-            # end for
-        # end for
-        return hits
-    
-    def apply_shoot_damage(self, hits):
-
-        for unit, damage in hits.items():
-
-            unit.health -= damage
-            print(f"Unit {unit} takes {damage} damage points")
-
-            if unit.health <= 0:
-                print(f"Unit {unit} dies from shots!")
-                unit.alive = False
-                #unit.zone = None # TODO: Revisar si interesa, o dejarlo para saber dónde ha muerto la unidad
-                unit.zone.units.remove(unit)
 
     def resolve_initiative_phase(self):
         
@@ -448,7 +413,7 @@ class Game:
         action = OilAction(wall)
 
         try:
-            action.execute(self)
+            action.execute()
             print(f"{wall.name}: {wall.oil_charges}")
         except Exception as e:
             print(f"[Game:resolve_oil_charges] Error adding oil charges: {e}")
@@ -473,10 +438,17 @@ class Game:
         other_player = self.get_other_player(initiative_player)
 
         shoot_actions = self.select_shoot_targets(initiative_player, other_player)
+        print(f"[Game:resolve_shoot_phase] Shoot actions (partial): {shoot_actions}")
+        
         shoot_actions += self.select_shoot_targets(other_player, initiative_player)
     
-        hits = self.resolve_shoot_actions(shoot_actions)
-        self.apply_shoot_damage(hits)
+        print(f"[Game:resolve_shoot_phase] Shoot actions (complete): {shoot_actions}")
+
+        for action in shoot_actions:
+            action.execute()
+
+        for action in shoot_actions:
+            action.apply_damage()
 
     def resolve_combat_phase(self):
 

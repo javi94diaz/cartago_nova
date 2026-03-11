@@ -7,7 +7,7 @@ class MoveAction(Action):
         self.origin = origin
         self.destination = destination
 
-    def validate(self, game):
+    def validate(self):
         if self.unit.engaged and self.origin != self.destination:
             raise ValueError(f"[MoveAction:validate] Unit is engaged and cannot move")
         
@@ -25,9 +25,9 @@ class MoveAction(Action):
         if self.origin.id == "north_wall" and self.destination.id == "lagoon":
             raise ValueError("[MoveAction:validate] Cannot move from North Wall to Lagoon")
 
-    def execute(self, game):
+    def execute(self):
         
-        self.validate(game)
+        self.validate()
 
         self.origin.units.remove(self.unit)
         self.destination.units.append(self.unit)

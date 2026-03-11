@@ -7,7 +7,7 @@ class AssaultAction(Action):
         self.origin = origin
         self.destination = destination
 
-    def validate(self, game):
+    def validate(self):
         if self.destination not in self.origin.adjacent and self.destination != self.origin:
             raise ValueError(f"[AssaultAction:validate] Destination is not adjacent to origin")
             
@@ -31,9 +31,9 @@ class AssaultAction(Action):
         if self.origin.id == "north_wall" and self.destination.id == "lagoon":
             raise ValueError("[AssaultAction:validate] Cannot move from North Wall to Lagoon")
 
-    def execute(self, game):
+    def execute(self):
         
-        self.validate(game)
+        self.validate()
 
         # Move the units
         self.origin.units.remove(self.unit)

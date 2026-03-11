@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 class Action(ABC):
 
     @abstractmethod
-    def validate(self, game):
+    def validate(self):
         raise NotImplementedError
 
     @abstractmethod
-    def execute(self, game):
+    def execute(self):
         raise NotImplementedError

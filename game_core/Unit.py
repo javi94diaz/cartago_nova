@@ -23,6 +23,6 @@ class Unit:
         self.alive = True
 
     def __repr__(self):
-        return f"<Unit {self.type.name}#{self.number} {self.owner.faction} @{self.zone.name}>"
+        return f"<Unit {self.type.name}#{self.number} {self.owner.faction} @{self.zone.name} {self.health}/{self.type.max_health}>"
 
         
