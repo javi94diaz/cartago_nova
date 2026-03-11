@@ -10,7 +10,8 @@
       "name": "Sailors",
       "max_health": 2,
       "attack": 2,
-      "shots": 2
+      "shots": 2,
+      "hit_number": 5
     },
     "princeps": {
       "name": "Princeps",
@@ -22,7 +23,8 @@
       "name": "Triarii",
       "max_health": 2,
       "attack": 4,
-      "shots": 2
+      "shots": 2,
+      "hit_number": 5
     },
     "numidians": {
       "name": "Numidians",
@@ -34,7 +36,8 @@
       "name": "Balearic Slingers",
       "max_health": 1,
       "attack": 1,
-      "shots": 2
+      "shots": 2,
+      "hit_number": 3
     },
     "iberian_lancers": {
       "name": "Iberian Lancers",
