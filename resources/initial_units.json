@@ -23,6 +23,12 @@
             "count": 1,
             "faction": "CARTHAGE",
             "zone": "south_wall"
+        },
+        {
+            "type": "balearic_slingers",
+            "count": 1,
+            "faction": "CARTHAGE",
+            "zone": "forum"
         }
     ]
 }
