@@ -1,5 +1,6 @@
 from game_core.actions.Action import Action
 from game_core.Enum import Faction
+
 class MoveAction(Action):
     def __init__(self, unit, origin, destination):
         self.unit = unit
