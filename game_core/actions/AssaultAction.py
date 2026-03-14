@@ -26,7 +26,7 @@ class AssaultAction(Action):
 
         if self.unit.owner.faction == Faction.CARTHAGE:
             if self.origin.is_city and not self.destination.is_city:
-                raise ValueError(f"[AssaultAction:validate] Carthage cannot leave the city")
+                raise ValueError(f"[AssaultAction:validate] Carthage cannot leave the city") # TODO: revisar esta condicion, posible bug
             
         if self.origin.id == "north_wall" and self.destination.id == "lagoon":
             raise ValueError("[AssaultAction:validate] Cannot move from North Wall to Lagoon")

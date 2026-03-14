@@ -45,7 +45,7 @@ class ShootAction(Action):
         
         self.validate()
 
-        print(f"[ShootAction:execute] Shooter: {self.shooter} | Target: {self.target}")
+        print(f"[ShootAction:execute] Shooter: {self.shooter} -->> Target: {self.target}")
 
         for shot in range (0, self.shooter.type.shots):
 
@@ -60,6 +60,7 @@ class ShootAction(Action):
                     self.hits[self.target] = 0
                 
                 self.hits[self.target] +=1
+                print (f"[ShootAction:execute] self.hits = {self.hits}")
         # end for
 
         print(f"[ShootAction:execute] Unit {self.shooter} shooted against {self.target}")
