@@ -316,7 +316,7 @@ class Game:
         shoot_actions = []
 
         shooters = [unit for unit in player_1.units if unit.alive and unit.type.shots > 0]
-        print(f"\n\n[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
+        print(f"\n[Game:select_shoot_targets] Shooters for player {player_1} are {shooters}")
 
         for shooter in shooters:
             
@@ -437,7 +437,7 @@ class Game:
         shoot_actions = self.select_shoot_targets(initiative_player, other_player)
         shoot_actions += self.select_shoot_targets(other_player, initiative_player)
     
-        print(f"[Game:resolve_shoot_phase] Shoot actions")
+        print(f"\n[Game:resolve_shoot_phase] Shoot actions")
         for action in shoot_actions:
             print(f"\t{action}")
 
