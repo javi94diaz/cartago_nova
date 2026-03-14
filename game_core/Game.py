@@ -8,6 +8,7 @@ from game_core.Player import Player
 from game_core.UnitType import UnitType
 from game_core.Unit import Unit
 from game_core.EventCard import EventCard
+from game_core.Engagement import Engagement
 from game_core.actions.OilAction import OilAction
 from game_core.actions.MoveAction import MoveAction
 from game_core.actions.AssaultAction import AssaultAction
@@ -42,6 +43,8 @@ class Game:
         self.initial_event_cards = self.event_cards.copy()
 
         self.turn_manager = TurnManager(self.players)
+
+        self.engagements = []
 
         self.main_loop()
 
@@ -311,6 +314,29 @@ class Game:
                     print (f"Unit {unit} skipped assault")
                     break
 
+    def create_engagements(self):
+        
+        self.engagements = []
+
+        for zone in self.board.zones.values():
+
+            factions = set(unit.owner.faction for unit in zone.units)
+
+            if len(factions) > 1:
+
+                engagement = Engagement(zone)
+
+                for unit in zone.units:
+
+                    if unit.owner.faction == Faction.ROME:
+                        engagement.attackers.append(unit)
+                    else:
+                        engagement.defenders.append(unit)
+
+                self.engagements.append(engagement)
+
+                print(f"Engagement created! {engagement}")
+
     def select_shoot_targets(self, player_1, player_2):
         
         shoot_actions = []
@@ -476,11 +502,11 @@ class Game:
                 pass 
 
             elif phase == Phase.MOVE_AND_ASSAULT:
-                #self.resolve_move_and_assault_phase()
+                self.resolve_move_and_assault_phase()
                 pass
 
             elif phase == Phase.SHOOT:
-                self.resolve_shoot_phase()
+                #self.resolve_shoot_phase()
                 pass
 
             elif phase == Phase.COMBAT:
