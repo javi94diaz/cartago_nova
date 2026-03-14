@@ -9,7 +9,6 @@ class Board():
         
         self.zones = {}
         self.load_map("resources/map.json")
-        #self.print_zones()
 
     def load_map(self, filename):
 
@@ -51,7 +50,8 @@ class Board():
         print("[Board:load_map] Loaded map")
 
     def print_zone_basic(self):
-        print("[Board:print_zones]")
+        
+        print("\n[Board:print_zone_basic] ==== BOARD STATE BASIC ====")
         for zone_name, zone in self.zones.items():
             print(f"Zone {zone_name} has {len(zone.units)} unit/s")
             
@@ -60,7 +60,7 @@ class Board():
 
     def print_zone_summary(self):
 
-        print("\n ==== BOARD STATE SUMMARY ====")
+        print("\n[Board:print_zone_summary] ==== BOARD STATE SUMMARY ====")
         print(f"{'Zone':18} {'ROME':>6} {'CARTHAGE':>10}")
         print("-" * 36)
 
@@ -77,9 +77,9 @@ class Board():
 
             print(f"{zone.name:18} {rome:>6} {carthage:>6}")
 
-
     def print_zone_detailed(self):
-        print("\n=== BOARD STATE DETAILED ===\n")
+
+        print("\n[Board:print_zone_summary] ==== BOARD STATE DETAILED ====\n")
         for zone in self.zones.values():
             print(f"Zone: {zone.name}")
 
@@ -99,5 +99,3 @@ class Board():
 
             if not faction_units:
                 print("  No units")
-            
-            print()
