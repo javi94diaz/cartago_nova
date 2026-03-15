@@ -25,10 +25,10 @@ class Board():
                 capacity = filezone["capacity"]
                 is_city = filezone["is_city"]
                 is_wall = filezone["is_wall"]
-                resistance = filezone["resistance"]
+                max_resistance = filezone["max_resistance"]
                 bonus_defense = filezone["bonus_defense"]
 
-                self.zones[zone_id] = Wall(zone_id, name, x, y, capacity, resistance, bonus_defense, is_city, is_wall)
+                self.zones[zone_id] = Wall(zone_id, name, x, y, capacity, max_resistance, bonus_defense, is_city, is_wall)
             else:
                 name = filezone["name"]
                 x = filezone["x"]
