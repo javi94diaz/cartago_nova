@@ -1,7 +1,7 @@
 {
     "initial_units": [
         {
-            "type": "velites",
+            "type": "triarii",
             "count": 1,
             "faction": "ROME",
             "zone": "plain"
@@ -13,7 +13,7 @@
             "zone": "port"
         },
         {
-            "type": "african_infantry",
+            "type": "numidians",
             "count": 1,
             "faction": "CARTHAGE",
             "zone": "east_wall"
