@@ -9,3 +9,7 @@ class Dice:
     @staticmethod
     def d6():
         return Dice.roll(6)
+    
+    @staticmethod
+    def roll_many(num, sides=6):
+        return [Dice.roll(sides) for _ in range(num)]
