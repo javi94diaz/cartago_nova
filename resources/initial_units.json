@@ -1,34 +1,23 @@
 {
     "initial_units": [
         {
-            "type": "triarii",
-            "count": 1,
-            "faction": "ROME",
-            "zone": "plain"
-        },
-        {
-            "type": "sailors",
+            "type": "princeps",
             "count": 1,
             "faction": "ROME",
             "zone": "port"
         },
         {
-            "type": "numidians",
-            "count": 1,
-            "faction": "CARTHAGE",
-            "zone": "east_wall"
+            "type": "triarii",
+            "count": 2,
+            "faction": "ROME",
+            "zone": "port"
         },
         {
             "type": "iberian_lancers",
             "count": 1,
             "faction": "CARTHAGE",
             "zone": "south_wall"
-        },
-        {
-            "type": "balearic_slingers",
-            "count": 1,
-            "faction": "CARTHAGE",
-            "zone": "south_wall"
         }
+
     ]
 }
