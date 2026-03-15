@@ -45,5 +45,8 @@ class AssaultAction(Action):
         
         # Mark destination units as engaged
         for unit in self.destination.units:
-            print(f"Unit {unit} is now engaged!")
-            unit.engaged = True
+            if not unit.engaged:
+                unit.engaged = True
+                print(f"Unit {unit} is now engaged!")
+            else:
+                print(f"Unit {unit} was already engaged")
