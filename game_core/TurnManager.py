@@ -33,7 +33,7 @@ class TurnManager:
         self.phase = Phase.INITIATIVE
         self.turn += 1
         if self.turn < (self.max_turns + 1):
-            print(f"[TurnManager:next_turn] ########## Turn number: {self.turn}/{self.max_turns} ##########")
+            print(f"[TurnManager:next_turn] ############################ Turn number: {self.turn}/{self.max_turns} ############################")
 
     def game_over(self):
         return self.turn > self.max_turns
