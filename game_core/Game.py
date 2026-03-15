@@ -508,7 +508,7 @@ class Game:
                 pass
 
             elif phase == Phase.SHOOT:
-                #self.resolve_shoot_phase()
+                self.resolve_shoot_phase()
                 pass
 
             elif phase == Phase.COMBAT:
