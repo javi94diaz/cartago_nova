@@ -2,12 +2,11 @@ from game_core.Zone import Zone
 
 class Wall(Zone):
     def __init__(self, id, name, x, y, capacity, max_resistance, bonus_defense, is_wall, is_city=True):
-        super().__init__(id, name, x, y, capacity, is_city)
+        super().__init__(id, name, x, y, capacity, is_city, is_wall)
         self.max_resistance = max_resistance
         self.resistance = max_resistance
         self.bonus_defense = bonus_defense
         self.oil_charges = []  # "heating" or "ready"
-        self.is_wall = is_wall
 
     def get_save_number(self):
 

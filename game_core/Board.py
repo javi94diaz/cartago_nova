@@ -35,8 +35,9 @@ class Board():
                 y = filezone["y"]
                 capacity = filezone["capacity"]
                 is_city = filezone["is_city"]
+                is_wall = filezone.get("is_wall")
 
-                self.zones[zone_id] = Zone(zone_id, name, x, y, capacity, is_city)
+                self.zones[zone_id] = Zone(zone_id, name, x, y, capacity, is_city, is_wall)
 
         # Load adjacents
         for zone_id, filezone in filedata["zones"].items():
