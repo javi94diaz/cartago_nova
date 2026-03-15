@@ -27,7 +27,50 @@ class Engagement():
         print(f"[Engagement:roll_combat] {group_name} get {rolls} results in combat")
         return(rolls)
 
-    def resolve(self): #TODO: sumar dados, hacer tiradas, aplicar modificadores, determinar ganador, aplicar daños
+    def apply_damage(self, damage_points, units):
+        
+        remaining_damage = damage_points
+        print(f"[Engagement:apply_damage] Applying {damage_points} damage points among {units}")
+        
+        for i, unit in enumerate(list(units)):
+
+            print(f"[Engagement:apply_damage] Remaining damages to apply: {remaining_damage}/{damage_points}")
+
+            # Last unit receives all remaining_damage
+            if i == len(units) - 1:
+
+                user_input = remaining_damage
+                print(f"{unit} receives remaining {remaining_damage} damage automatically")
+
+            else:
+
+                while True:
+
+                    try:
+
+                        user_input = int(input(f"Enter number of damage points for unit {unit}: "))
+
+                        if (0 <= user_input <= remaining_damage) and (user_input <= unit.health):
+                            break
+                        else:
+                            print("Invalid input, please type again.")
+
+                    except ValueError:
+                        print("Invalid input, please type a number.")
+
+            unit.health -= user_input
+            remaining_damage -= user_input
+
+            if unit.health <= 0:
+                print(f"Unit {unit} dies in combat!")
+                unit.alive = False
+                #unit.zone = None # TODO: Revisar si interesa, o dejarlo para saber dónde ha muerto la unidad
+                unit.zone.units.remove(unit)
+
+            else:
+                print(f"Unit {unit} takes {user_input} damage points")
+
+    def resolve(self):
         
         print(f"Combat in {self.zone.name}")
 
@@ -46,7 +89,6 @@ class Engagement():
         attackers_success_num = sum(n >= 4 for n in self.attackers_rolls)
         defenders_success_num = sum(n >= 4 for n in self.defenders_rolls)
         
-
         # Apply damage
         units_damage = abs(attackers_success_num - defenders_success_num)
 
@@ -54,12 +96,17 @@ class Engagement():
 
         if attackers_success_num > defenders_success_num:  # TODO: distribuir daños entre las unidades
             print(f"[Engagement:resolve] Attacker wins! Defender takes {units_damage} damage point/s!")
+            self.apply_damage(units_damage, self.defenders)
         elif attackers_success_num < defenders_success_num:
             print(f"[Engagement:resolve] Defender wins! Attacker takes {units_damage} damage point/s!")
+            self.apply_damage(units_damage, self.attackers)
         else:
             print(f"[Engagement:resolve] Tie! Each side takes 1 damage point!")
             units_damage = 1
+            self.apply_damage(units_damage, self.attackers)
+            self.apply_damage(units_damage, self.defenders)
 
+        # Apply wall damage
         attacker_6s = sum( n == 6 for n in self.attackers_rolls)
         defenders_6s = sum( n == 6 for n in self.defenders_rolls)
 
@@ -72,8 +119,7 @@ class Engagement():
             self.zone.resistance -= wall_damage
 
             if self.zone.resistance < 0:
-                print(f"MURO se queda negativo: {self.zone.resistance}")
+                print("[Engagement:resolve] Wall resistance is lower than 0, setting to 0")
                 self.zone.resistance = 0
-                print(f"MURO puesto a cero: {self.zone.resistance}")
 
             print(f"[Engagement:resolve] {self.zone.name} wall has {self.zone.resistance} remaining resistance points")
