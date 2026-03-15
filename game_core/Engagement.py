@@ -27,7 +27,6 @@ class Engagement():
         print(f"[Engagement:roll_combat] {group_name} get {rolls} results in combat")
         return(rolls)
 
-
     def resolve(self): #TODO: sumar dados, hacer tiradas, aplicar modificadores, determinar ganador, aplicar daños
         
         print(f"Combat in {self.zone.name}")
@@ -36,8 +35,19 @@ class Engagement():
         self.attackers_rolls = self.roll_combat(self.attackers, "Attackers")
         self.defenders_rolls = self.roll_combat(self.defenders, "Defenders")
 
+        if self.zone.is_wall:
+            
+            wall_bonus = self.zone.get_bonus_defense()
+            print(f"[Engagement:resolve] Defender gets wall bonus: {wall_bonus}")
+            self.defenders_rolls += wall_bonus
+            print(f"[Engagement:resolve] Defender final roll after bonus: {self.defenders_rolls}")
+
+
         attackers_success_num = sum(n >= 4 for n in self.attackers_rolls)
         defenders_success_num = sum(n >= 4 for n in self.defenders_rolls)
+        
+
+        # Apply damage
         units_damage = abs(attackers_success_num - defenders_success_num)
 
         print(f"[Engagement:resolve] Result - Attackers: {attackers_success_num} successes. Defenders: {defenders_success_num} successes")
