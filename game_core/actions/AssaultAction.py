@@ -47,5 +47,3 @@ class AssaultAction(Action):
         for unit in self.destination.units:
             print(f"Unit {unit} is now engaged!")
             unit.engaged = True
-            
-        # crear Engagement!
