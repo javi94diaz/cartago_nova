@@ -213,8 +213,6 @@ class Game:
                 
                 if user_input == "":
                     return unit.zone # Stay in the same zone
-                
-                print(f"user_input no vacia: {user_input}")
 
                 user_input = int(user_input)
 
@@ -271,9 +269,7 @@ class Game:
                 user_input = input("Enter the number of the zone to assault: ")
                 
                 if user_input == "":
-                    return unit.zone # Stay in the same zone  
-                
-                print(f"user_input no vacia: {user_input}")
+                    return unit.zone # Skip assault
 
                 user_input = int(user_input)
                 
@@ -453,6 +449,8 @@ class Game:
         self.move_units_for_player(other_player)
         self.assault_units_for_player(other_player)
 
+        self.create_engagements()
+
     def resolve_shoot_phase(self):
 
         print (f"[Game:resolve_shoot] ====== SHOOT ======")
@@ -476,6 +474,10 @@ class Game:
     def resolve_combat_phase(self):
 
         print (f"[Game:resolve_combat] ====== COMBAT ======")
+
+        for engagement in self.engagements:
+            engagement.resolve()
+
 
     def main_loop(self):
 
@@ -510,7 +512,7 @@ class Game:
                 pass
 
             elif phase == Phase.COMBAT:
-                #self.resolve_combat_phase()
+                self.resolve_combat_phase()
                 pass
 
             self.turn_manager.next_phase()
