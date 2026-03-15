@@ -13,29 +13,28 @@ class Engagement():
     def __repr__(self):
         return f"<Engagement {self.zone} between \n\t{self.attackers}\n\t{self.defenders}>"
     
+    def roll_combat(self, units, group_name="Group"):
+
+        dice_num = 0
+        for unit in units:
+
+            print(f"{unit} fights!")
+            dice_num += unit.type.combat_dice
+
+        print(f"[Engagement:roll_combat] {group_name} roll {dice_num} dice")
+        rolls = Dice.roll_many(dice_num)
+
+        print(f"[Engagement:roll_combat] {group_name} get {rolls} results in combat")
+        return(rolls)
+
+
     def resolve(self): #TODO: sumar dados, hacer tiradas, aplicar modificadores, determinar ganador, aplicar daños
         
         print(f"Combat in {self.zone.name}")
 
-        attackers_dice_num = 0
-        defenders_dice_num = 0
-        for unit in self.attackers:
-
-            print(f"{unit} attacks!")
-            attackers_dice_num += unit.type.combat_dice
-
-        print(f"[Engagement:resolve] Attackers roll {attackers_dice_num} dice")
-        self.attackers_rolls = Dice.roll_many(attackers_dice_num)
-        print(f"[Engagement:resolve] Attackers get {self.attackers_rolls} results in combat")
-
-        for unit in self.defenders:
-
-            print(f"{unit} defends!")
-            defenders_dice_num += unit.type.combat_dice
-        
-        print(f"[Engagement:resolve] Defenders roll {defenders_dice_num} dice")
-        self.defenders_rolls = Dice.roll_many(defenders_dice_num)
-        print(f"[Engagement:resolve] Attackers get {self.defenders_rolls} results in combat")
+        print(f"[Engagement:resolve] ")
+        self.attackers_rolls = self.roll_combat(self.attackers, "Attackers")
+        self.defenders_rolls = self.roll_combat(self.defenders, "Defenders")
 
         attackers_success_num = sum(n >= 4 for n in self.attackers_rolls)
         defenders_success_num = sum(n >= 4 for n in self.defenders_rolls)
