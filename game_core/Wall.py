@@ -17,7 +17,27 @@ class Wall(Zone):
         elif self.resistance == 1:
             return 6
         else:
-            return None # TODO: Revisar si conviene devolver 7, que nunca se alcanza en 1D6
+            return None
+
+    def get_bonus_defense(self):
+
+        if self.resistance == 3:
+            return [6, 4, 4]
+        elif self.resistance == 2:
+            if self.id == "south_wall":
+                return [6,4]
+            elif self.id == "east_wall":
+                return [4,4]
+            else:
+                print(f"[Wall:get_bonus_defense] Error getting bonus")
+                raise ValueError
+        elif self.resistance == 1:
+            if self.id == "north_wall":
+                return [6]
+            else:
+                return [4]
+        else:
+            return None
 
     def heat_oil(self):
         self.oil_charges.append("heating")
