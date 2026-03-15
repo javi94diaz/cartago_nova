@@ -13,7 +13,7 @@ class Engagement():
     def __repr__(self):
         return f"<Engagement {self.zone} between \n\t{self.attackers}\n\t{self.defenders}>"
     
-    def roll_combat(self, units, group_name="Group"):
+    def get_combat_rolls(self, units, group_name="Group"):
 
         # dice_num = sum(unit.type.combat_dice for unit in units)
         rolls = []
@@ -26,7 +26,7 @@ class Engagement():
 
             rolls.extend(unit_rolls)
 
-        print(f"[Engagement:roll_combat] {group_name} get {rolls} results in combat")
+        print(f"[Engagement:get_combat_rolls] {group_name} get {rolls} results in combat")
         return(rolls)
 
     def apply_damage(self, damage_points, units):
@@ -77,8 +77,8 @@ class Engagement():
         print(f"Combat in {self.zone.name}")
 
         print(f"[Engagement:resolve] ")
-        self.attackers_rolls = self.roll_combat(self.attackers, "Attackers")
-        self.defenders_rolls = self.roll_combat(self.defenders, "Defenders")
+        self.attackers_rolls = self.get_combat_rolls(self.attackers, "Attackers")
+        self.defenders_rolls = self.get_combat_rolls(self.defenders, "Defenders")
 
         if self.zone.is_wall:
             
