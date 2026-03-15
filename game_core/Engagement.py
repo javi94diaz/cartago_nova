@@ -15,14 +15,16 @@ class Engagement():
     
     def roll_combat(self, units, group_name="Group"):
 
-        dice_num = 0
+        # dice_num = sum(unit.type.combat_dice for unit in units)
+        rolls = []
         for unit in units:
 
             print(f"{unit} fights!")
-            dice_num += unit.type.combat_dice
 
-        print(f"[Engagement:roll_combat] {group_name} roll {dice_num} dice")
-        rolls = Dice.roll_many(dice_num)
+            unit_rolls = Dice.roll_many(unit.type.combat_dice)
+            print(f"{unit} rolls: {unit_rolls}")
+
+            rolls.extend(unit_rolls)
 
         print(f"[Engagement:roll_combat] {group_name} get {rolls} results in combat")
         return(rolls)
@@ -82,7 +84,7 @@ class Engagement():
             
             wall_bonus = self.zone.get_bonus_defense()
             print(f"[Engagement:resolve] Defender gets wall bonus: {wall_bonus}")
-            self.defenders_rolls += wall_bonus
+            self.defenders_rolls.append(wall_bonus)
             print(f"[Engagement:resolve] Defender final roll after bonus: {self.defenders_rolls}")
 
 
