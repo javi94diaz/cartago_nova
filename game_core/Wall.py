@@ -37,7 +37,8 @@ class Wall(Zone):
             else:
                 return [4]
         else:
-            return None
+            print(f"[Wall:get_bonus_defense] Wall with {self.resistance} resistance gives no bonus")
+            return []
 
     def heat_oil(self):
         self.oil_charges.append("heating")
