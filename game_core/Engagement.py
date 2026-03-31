@@ -3,7 +3,6 @@ from game_core.Dice import Dice
 class Engagement():
     def __init__(self, zone):
         self.zone = zone
-        self.units = zone.units.copy() # TODO: bug, se copia el estado del mundo demasiado pronto, y los disparos pueden matar unidades antes del combate
         self.attackers = []
         self.defenders = []
 

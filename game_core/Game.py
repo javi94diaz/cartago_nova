@@ -449,8 +449,6 @@ class Game:
         self.move_units_for_player(other_player)
         self.assault_units_for_player(other_player)
 
-        self.create_engagements()
-
     def resolve_shoot_phase(self):
 
         print (f"[Game:resolve_shoot] ====== SHOOT ======")
@@ -475,6 +473,10 @@ class Game:
 
         print (f"[Game:resolve_combat] ====== COMBAT ======")
 
+        self.create_engagements()
+
+        print(self.engagements)
+
         for engagement in self.engagements:
             engagement.resolve()
 
@@ -495,7 +497,7 @@ class Game:
                 #self.resolve_initiative_phase()
                 pass
 
-            elif phase == Phase.EVENT: # [OK] DONE
+            elif phase == Phase.EVENT: # [OK] DONE mas o menos
                 #self.resolve_event_phase()
                 pass
 
@@ -503,15 +505,15 @@ class Game:
                 #self.resolve_oil_charges_phase()
                 pass 
 
-            elif phase == Phase.MOVE_AND_ASSAULT:
+            elif phase == Phase.MOVE_AND_ASSAULT: # [OK] DONE
                 self.resolve_move_and_assault_phase()
                 pass
 
-            elif phase == Phase.SHOOT:
+            elif phase == Phase.SHOOT: # [OK] DONE
                 self.resolve_shoot_phase()
                 pass
 
-            elif phase == Phase.COMBAT:
+            elif phase == Phase.COMBAT: # [OK] DONE
                 self.resolve_combat_phase()
                 pass
 
