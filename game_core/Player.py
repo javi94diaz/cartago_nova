@@ -46,9 +46,9 @@ class Player():
 
             if unit.health <= 0:
                 print(f"Unit {unit} dies in combat!")
-                unit.alive = False
-                #unit.zone = None # TODO: Revisar si interesa, o dejarlo para saber dónde ha muerto la unidad
-                unit.zone.units.remove(unit)
+                
+                if unit.zone and unit in unit.zone.units:
+                    unit.zone.units.remove(unit)
 
             else:
                 print(f"Unit {unit} takes {user_input} damage points")
