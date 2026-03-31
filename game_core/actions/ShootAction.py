@@ -23,7 +23,7 @@ class ShootAction(Action):
 
     def validate(self):
 
-        print(f"[ShootAction:validate]")
+        print(f"[ShootAction#{self.id}:validate]")
 
         if self.shooter.type.shots == 0:
             raise ValueError(f"[ShootAction#{self.id}:validate] Unit cannot shoot")

@@ -6,6 +6,9 @@ class OilAction(Action):
         super().__init__()
         self.wall = wall
 
+    def describe(self):
+        return f"OIL on {self.wall}"
+
     def validate(self):
         if not isinstance(self.wall, Wall):
             raise ValueError("Selected zone is not a wall")

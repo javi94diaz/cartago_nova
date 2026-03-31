@@ -8,9 +8,12 @@ class AssaultAction(Action):
         self.origin = origin
         self.destination = destination
 
+    def describe(self):
+        return f"{self.unit} assaults {self.destination}"
+
     def validate(self):
         if self.destination not in self.origin.adjacent and self.destination != self.origin:
-            raise ValueError(f"[AssaultAction:validate] Destination is not adjacent to origin")
+            raise ValueError(f"[AssaultAction#{self.id}:validate] Destination is not adjacent to origin")
             
         enemy_found = False
         
@@ -20,17 +23,17 @@ class AssaultAction(Action):
                 break
 
         if not enemy_found:
-            raise ValueError(f"[AssaultAction:validate] No enemy units in destination zone")
+            raise ValueError(f"[AssaultAction#{self.id}:validate] No enemy units in destination zone")
 
         if self.unit.engaged:
-            raise ValueError(f"[AssaultAction:validate] Unit already engaged")
+            raise ValueError(f"[AssaultAction#{self.id}:validate] Unit already engaged")
 
         if self.unit.owner.faction == Faction.CARTHAGE:
             if self.origin.is_city and not self.destination.is_city:
-                raise ValueError(f"[AssaultAction:validate] Carthage cannot leave the city") # TODO: revisar esta condicion, posible bug
+                raise ValueError(f"[AssaultAction#{self.id}:validate] Carthage cannot leave the city") # TODO: revisar esta condicion, posible bug
             
         if self.origin.id == "north_wall" and self.destination.id == "lagoon":
-            raise ValueError("[AssaultAction:validate] Cannot move from North Wall to Lagoon")
+            raise ValueError("[AssaultAction#{self.id}:validate] Cannot move from North Wall to Lagoon")
 
     def execute(self):
         
@@ -42,12 +45,12 @@ class AssaultAction(Action):
 
         self.unit.zone = self.destination
         
-        print(f"[AssaultAction:execute] Unit {self.unit} assaulted {self.destination.name} zone")
+        print(f"[AssaultAction#{self.id}:execute] Unit {self.unit} assaulted {self.destination.name} zone")
         
         # Mark destination units as engaged
         for unit in self.destination.units:
             if not unit.engaged:
                 unit.engaged = True
-                print(f"Unit {unit} is now engaged!")
+                print(f"[AssaultAction#{self.id}:execute] Unit {unit} is now engaged!")
             else:
-                print(f"Unit {unit} was already engaged")
+                print(f"[AssaultAction#{self.id}:execute] Unit {unit} was already engaged")
