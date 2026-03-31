@@ -20,9 +20,10 @@ class Unit:
 
         self.health = unit_type.max_health
         self.engaged = False
-        self.alive = True
 
     def __repr__(self):
         return f"<Unit {self.type.name}#{self.number} {self.owner.faction} @{self.zone.name} {self.health}/{self.type.max_health}>"
 
-        
+    @property
+    def alive(self):
+        return self.health > 0
