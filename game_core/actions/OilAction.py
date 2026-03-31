@@ -3,6 +3,7 @@ from game_core.Wall import Wall
 
 class OilAction(Action):
     def __init__(self, wall):
+        super().__init__()
         self.wall = wall
 
     def validate(self):

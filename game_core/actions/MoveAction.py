@@ -3,6 +3,7 @@ from game_core.Enum import Faction
 
 class MoveAction(Action):
     def __init__(self, unit, origin, destination):
+        super().__init__()
         self.unit = unit
         self.origin = origin
         self.destination = destination
